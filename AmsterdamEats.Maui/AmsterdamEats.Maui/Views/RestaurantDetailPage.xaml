@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AmsterdamEats.ViewModels"
+             xmlns:models="clr-namespace:AmsterdamEats.Models"
+             x:Class="AmsterdamEats.Views.RestaurantDetailPage"
+             x:DataType="vm:RestaurantDetailViewModel"
+             Title="{Binding Restaurant.Name}">
+
+    <ScrollView>
+        <VerticalStackLayout Spacing="0">
+
+            <!-- Photo header -->
+            <Image Source="{Binding Restaurant.PhotoUrl}"
+                   Aspect="AspectFill"
+                   HeightRequest="240" />
+
+            <VerticalStackLayout Padding="24" Spacing="16">
+
+                <!-- Name + meta -->
+                <Label Text="{Binding Restaurant.Name}" FontSize="24" FontAttributes="Bold" />
+
+                <HorizontalStackLayout Spacing="12">
+                    <Label Text="{Binding Restaurant.RatingDisplay}" TextColor="Orange" FontSize="16" />
+                    <Label Text="{Binding Restaurant.ReviewCountDisplay}"
+                           TextColor="{StaticResource Gray500}" FontSize="14" VerticalOptions="Center" />
+                    <Label Text="{Binding Restaurant.PriceLevelDisplay}"
+                           TextColor="{StaticResource Gray500}" FontSize="14" VerticalOptions="Center" />
+                </HorizontalStackLayout>
+
+                <Label Text="{Binding Restaurant.Address}"
+                       TextColor="{StaticResource Gray500}" FontSize="14" />
+
+                <BoxView HeightRequest="1" Color="{StaticResource Gray200}" Margin="0,4" />
+
+                <!-- Available — show slots + Book Now -->
+                <VerticalStackLayout IsVisible="{Binding Restaurant.HasAvailability}" Spacing="10">
+                    <Label Text="Available Shifts" FontSize="17" FontAttributes="Bold" />
+                    <VerticalStackLayout BindableLayout.ItemsSource="{Binding Restaurant.AvailableSlots}"
+                                        Spacing="4">
+                        <BindableLayout.ItemTemplate>
+                            <DataTemplate x:DataType="models:ZenchefSlot">
+                                <HorizontalStackLayout Spacing="8">
+                                    <Label Text="🕒" FontSize="14" />
+                                    <Label Text="{Binding ShiftName}" FontSize="14" TextColor="Green" />
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </BindableLayout.ItemTemplate>
+                    </VerticalStackLayout>
+                    <Button Text="Book Now"
+                            Clicked="OnBookNowClicked"
+                            HeightRequest="50"
+                            FontSize="16"
+                            FontAttributes="Bold"
+                            Margin="0,8,0,0" />
+                </VerticalStackLayout>
+
+                <!-- Not available — fallback to website -->
+                <VerticalStackLayout IsVisible="{Binding Restaurant.HasAvailability,
+                                        Converter={StaticResource InverseBoolConverter}}"
+                                     Spacing="12">
+                    <Label Text="Online booking is not available for your selected date and party size."
+                           TextColor="{StaticResource Gray500}" FontSize="14" />
+                    <Button Text="Visit Website"
+                            Clicked="OnVisitWebsiteClicked"
+                            IsVisible="{Binding Restaurant.HasWebsite}"
+                            BackgroundColor="{StaticResource Gray200}"
+                            TextColor="{StaticResource Gray900}"
+                            HeightRequest="50"
+                            FontSize="15" />
+                </VerticalStackLayout>
+
+            </VerticalStackLayout>
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

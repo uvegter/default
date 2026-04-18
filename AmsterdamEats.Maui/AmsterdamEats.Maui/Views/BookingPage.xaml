@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AmsterdamEats.ViewModels"
+             x:Class="AmsterdamEats.Views.BookingPage"
+             x:DataType="vm:BookingViewModel"
+             Title="{Binding BookingRequest.RestaurantName, StringFormat='Book · {0}'}">
+
+    <Grid RowDefinitions="*,Auto">
+
+        <!-- WebView2 loads the Zenchef booking widget (requires WebView2 runtime, pre-installed on Win10/11) -->
+        <WebView x:Name="BookingWebView" Grid.Row="0" />
+
+        <Button Grid.Row="1"
+                Text="Open in Browser Instead"
+                Clicked="OnOpenInBrowserClicked"
+                BackgroundColor="{StaticResource Gray100}"
+                TextColor="{StaticResource Primary}"
+                Margin="16,8" />
+    </Grid>
+</ContentPage>

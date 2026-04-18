@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AmsterdamEats.ViewModels"
+             xmlns:models="clr-namespace:AmsterdamEats.Models"
+             x:Class="AmsterdamEats.Views.SearchPage"
+             x:DataType="vm:SearchViewModel"
+             Title="Amsterdam Eats">
+
+    <ScrollView>
+        <VerticalStackLayout Padding="24" Spacing="6">
+
+            <Label Text="Find a Restaurant"
+                   FontSize="26" FontAttributes="Bold"
+                   Margin="0,8,0,20" />
+
+            <!-- Date -->
+            <Label Text="DATE" FontSize="11" TextColor="{StaticResource Gray500}" CharacterSpacing="1.2" />
+            <Border StrokeShape="RoundRectangle 8" Padding="12,6" Margin="0,4,0,14">
+                <DatePicker x:Name="DatePickerControl"
+                            Date="{Binding Date}"
+                            Format="dddd, MMMM d yyyy"
+                            FontSize="15" />
+            </Border>
+
+            <!-- Time -->
+            <Label Text="TIME" FontSize="11" TextColor="{StaticResource Gray500}" CharacterSpacing="1.2" />
+            <Border StrokeShape="RoundRectangle 8" Padding="12,6" Margin="0,4,0,14">
+                <TimePicker Time="{Binding Time}" Format="HH:mm" FontSize="15" />
+            </Border>
+
+            <!-- Party Size -->
+            <Label Text="PARTY SIZE" FontSize="11" TextColor="{StaticResource Gray500}" CharacterSpacing="1.2" />
+            <Border StrokeShape="RoundRectangle 8" Padding="12,10" Margin="0,4,0,14">
+                <Grid ColumnDefinitions="*,Auto">
+                    <Label Text="{Binding NumberOfPeople, StringFormat='{0} people'}"
+                           FontSize="15" VerticalOptions="Center" Grid.Column="0" />
+                    <Stepper Value="{Binding NumberOfPeople}" Minimum="1" Maximum="20"
+                             VerticalOptions="Center" Grid.Column="1" />
+                </Grid>
+            </Border>
+
+            <!-- Cuisine -->
+            <Label Text="CUISINE" FontSize="11" TextColor="{StaticResource Gray500}" CharacterSpacing="1.2" />
+            <Border StrokeShape="RoundRectangle 8" Padding="12,4" Margin="0,4,0,14">
+                <Picker ItemsSource="{Binding CuisineTypeNames}"
+                        SelectedIndex="{Binding SelectedCuisineIndex}"
+                        FontSize="15" />
+            </Border>
+
+            <!-- Price Range -->
+            <Label Text="PRICE RANGE" FontSize="11" TextColor="{StaticResource Gray500}" CharacterSpacing="1.2" />
+            <Border StrokeShape="RoundRectangle 8" Padding="12,10" Margin="0,4,0,20">
+                <VerticalStackLayout BindableLayout.ItemsSource="{Binding PriceLevelOptions}" Spacing="6">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="models:PriceLevelOption">
+                            <HorizontalStackLayout Spacing="10">
+                                <CheckBox IsChecked="{Binding IsSelected}" VerticalOptions="Center" />
+                                <Label Text="{Binding DisplayName}" FontSize="15" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+            </Border>
+
+            <Button Text="Find Restaurants"
+                    Clicked="OnSearchClicked"
+                    HeightRequest="50"
+                    FontSize="16"
+                    FontAttributes="Bold" />
+
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

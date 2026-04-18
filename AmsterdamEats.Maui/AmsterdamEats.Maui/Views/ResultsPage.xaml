@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:AmsterdamEats.ViewModels"
+             xmlns:models="clr-namespace:AmsterdamEats.Models"
+             x:Class="AmsterdamEats.Views.ResultsPage"
+             x:DataType="vm:ResultsViewModel"
+             Title="Results">
+
+    <Grid>
+        <!-- Loading -->
+        <ActivityIndicator IsRunning="{Binding IsLoading}"
+                           IsVisible="{Binding IsLoading}"
+                           VerticalOptions="Center" HorizontalOptions="Center" />
+
+        <!-- Error -->
+        <VerticalStackLayout IsVisible="{Binding HasError}"
+                             VerticalOptions="Center" HorizontalOptions="Center"
+                             Spacing="12" Padding="32">
+            <Label Text="⚠️" FontSize="48" HorizontalOptions="Center" />
+            <Label Text="{Binding ErrorMessage}"
+                   HorizontalOptions="Center" HorizontalTextAlignment="Center"
+                   TextColor="{StaticResource Gray600}" />
+        </VerticalStackLayout>
+
+        <!-- Results -->
+        <CollectionView ItemsSource="{Binding Restaurants}"
+                        IsVisible="{Binding IsLoading, Converter={StaticResource InverseBoolConverter}}"
+                        SelectionMode="Single"
+                        SelectionChanged="OnRestaurantSelected">
+
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Restaurant">
+                    <Grid ColumnDefinitions="84,*" Padding="16,10" ColumnSpacing="12">
+
+                        <!-- Photo thumbnail -->
+                        <Border Grid.Column="0"
+                                StrokeShape="RoundRectangle 10"
+                                StrokeThickness="0"
+                                HeightRequest="72" WidthRequest="72"
+                                VerticalOptions="Start">
+                            <Image Source="{Binding PhotoUrl}" Aspect="AspectFill"
+                                   HeightRequest="72" WidthRequest="72" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1" Spacing="3">
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding Name}"
+                                       FontSize="15" FontAttributes="Bold"
+                                       LineBreakMode="TailTruncation"
+                                       HorizontalOptions="FillAndExpand" />
+                                <Border IsVisible="{Binding ShowAvailabilityBadge}"
+                                        BackgroundColor="{Binding HasAvailability, Converter={StaticResource BoolToAvailabilityColorConverter}}"
+                                        StrokeShape="RoundRectangle 10"
+                                        StrokeThickness="0"
+                                        Padding="6,2"
+                                        VerticalOptions="Center">
+                                    <Label Text="{Binding AvailabilityBadge}"
+                                           FontSize="10" TextColor="White" />
+                                </Border>
+                            </HorizontalStackLayout>
+                            <Label Text="{Binding Address}"
+                                   FontSize="12" TextColor="{StaticResource Gray500}"
+                                   LineBreakMode="TailTruncation" />
+                            <HorizontalStackLayout Spacing="8">
+                                <Label Text="{Binding RatingDisplay}" FontSize="12" TextColor="Orange" />
+                                <Label Text="{Binding ReviewCountDisplay}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{Binding PriceLevelDisplay}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                            </HorizontalStackLayout>
+                        </VerticalStackLayout>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+
+            <CollectionView.EmptyView>
+                <VerticalStackLayout VerticalOptions="Center" HorizontalOptions="Center"
+                                     Spacing="12" Padding="32">
+                    <Label Text="🍽️" FontSize="48" HorizontalOptions="Center" />
+                    <Label Text="No restaurants found" FontSize="18" FontAttributes="Bold"
+                           HorizontalOptions="Center" />
+                    <Label Text="Try adjusting your search criteria."
+                           HorizontalOptions="Center" TextColor="{StaticResource Gray500}" />
+                </VerticalStackLayout>
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+</ContentPage>
