@@ -1,4 +1,6 @@
 using System.Net.Http.Json;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using AmsterdamEats.Config;
 using AmsterdamEats.Models;
@@ -11,13 +13,16 @@ public class ZenchefService
 
     public ZenchefService(HttpClient http) => _http = http;
 
-    // Fetches the restaurant's own website and scans for a Zenchef booking widget embed code.
     public async Task<int?> ResolveRestaurantIdAsync(Restaurant restaurant)
     {
         if (string.IsNullOrEmpty(restaurant.WebsiteUri)) return null;
         try
         {
-            var html = await _http.GetStringAsync(restaurant.WebsiteUri);
+            var req = new HttpRequestMessage(HttpMethod.Get, restaurant.WebsiteUri);
+            req.Headers.Add("User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36");
+            var response = await _http.SendAsync(req);
+            if (!response.IsSuccessStatusCode) return null;
+            var html = await response.Content.ReadAsStringAsync();
             return ExtractZenchefId(html);
         }
         catch { return null; }
@@ -28,13 +33,18 @@ public class ZenchefService
         string[] patterns =
         [
             @"data-restaurant-id=""(\d+)""",
+            @"data-rid=""(\d+)""",
+            @"data-zenchef-id=""(\d+)""",
             @"[?&]rid=(\d+)",
+            @"bookings\.zenchef\.com/results\?rid=(\d+)",
             @"restaurant_id[""'\s]*[:=][""'\s]*(\d+)",
+            @"""restaurant_id""\s*:\s*(\d+)",
+            @"restaurantId[""'\s]*[:=][""'\s]*(\d+)",
             @"zenchef\.com[^""']*[?&]rid=(\d+)"
         ];
         foreach (var pattern in patterns)
         {
-            var match = Regex.Match(html, pattern);
+            var match = Regex.Match(html, pattern, RegexOptions.IgnoreCase);
             if (match.Success && int.TryParse(match.Groups[1].Value, out var id))
                 return id;
         }
@@ -48,14 +58,38 @@ public class ZenchefService
                   $"?restaurantId={restaurantId}&date_begin={dateString}&date_end={dateString}";
         try
         {
-            var shifts = await _http.GetFromJsonAsync<List<ZenchefShift>>(url) ?? [];
-            return shifts
-                .Where(s => !s.Closed
-                    && s.PossibleGuests.Contains(criteria.NumberOfPeople)
-                    && s.Schedule.Date == dateString)
+            using var response = await _http.GetAsync(url);
+            if (!response.IsSuccessStatusCode) return [];
+
+            var json = await response.Content.ReadAsStringAsync();
+
+            // Try direct array first
+            List<ZenchefShift>? shifts = null;
+            try { shifts = JsonSerializer.Deserialize<List<ZenchefShift>>(json); }
+            catch { }
+
+            // Try wrapped object {"shifts":[...]} or {"data":[...]}
+            if (shifts == null || shifts.Count == 0)
+            {
+                try
+                {
+                    var wrapped = JsonSerializer.Deserialize<ZenchefShiftsWrapper>(json);
+                    shifts = wrapped?.Shifts ?? wrapped?.Data;
+                }
+                catch { }
+            }
+
+            return (shifts ?? [])
+                .Where(s => !s.Closed && s.PossibleGuests.Contains(criteria.NumberOfPeople))
                 .Select(s => new ZenchefSlot { Id = s.Id, ShiftName = s.Name, Date = s.Schedule.Date })
                 .ToList();
         }
         catch { return []; }
+    }
+
+    private class ZenchefShiftsWrapper
+    {
+        [JsonPropertyName("shifts")] public List<ZenchefShift>? Shifts { get; set; }
+        [JsonPropertyName("data")] public List<ZenchefShift>? Data { get; set; }
     }
 }
