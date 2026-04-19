@@ -19,34 +19,19 @@ public class GooglePlacesService
             "places.id,places.displayName,places.formattedAddress,places.rating," +
             "places.userRatingCount,places.priceLevel,places.websiteUri,places.photos");
 
-        var priceLevels = criteria.PriceRange.Count == 0
-            ? Enum.GetValues<PriceLevel>().Select(MapPriceLevel).ToList()
-            : criteria.PriceRange.Select(MapPriceLevel).ToList();
-
         var body = new
         {
-            textQuery = $"{GetQueryPrefix(criteria.Cuisine)} Amsterdam",
-            includedType = "restaurant",
-            locationRestriction = new
-            {
-                circle = new
-                {
-                    center = new { latitude = ApiConfig.AmsterdamLatitude, longitude = ApiConfig.AmsterdamLongitude },
-                    radius = ApiConfig.SearchRadiusMeters
-                }
-            },
-            priceLevels,
-            minRating = 3.5,
-            rankPreference = "RELEVANCE",
+            textQuery = $"{GetQueryPrefix(criteria.Cuisine)} restaurant Amsterdam",
             maxResultCount = 20
         };
 
         request.Content = JsonContent.Create(body);
         var response = await _http.SendAsync(request);
+
         if (!response.IsSuccessStatusCode)
         {
             var errorBody = await response.Content.ReadAsStringAsync();
-            throw new HttpRequestException($"Google Places API error {(int)response.StatusCode}: {errorBody}");
+            throw new HttpRequestException($"Google Places error {(int)response.StatusCode}: {errorBody}");
         }
 
         var result = await response.Content.ReadFromJsonAsync<PlacesResponse>();
@@ -67,16 +52,7 @@ public class GooglePlacesService
     }
 
     private static string GetQueryPrefix(CuisineType cuisine) =>
-        cuisine == CuisineType.Any ? "restaurant" : $"{cuisine.ToString().ToLower()} restaurant";
-
-    private static string MapPriceLevel(PriceLevel level) => level switch
-    {
-        PriceLevel.Budget => "PRICE_LEVEL_INEXPENSIVE",
-        PriceLevel.Moderate => "PRICE_LEVEL_MODERATE",
-        PriceLevel.Expensive => "PRICE_LEVEL_EXPENSIVE",
-        PriceLevel.VeryExpensive => "PRICE_LEVEL_VERY_EXPENSIVE",
-        _ => "PRICE_LEVEL_MODERATE"
-    };
+        cuisine == CuisineType.Any ? string.Empty : cuisine.ToString().ToLower() + " ";
 
     private static string? MapPriceLevelToSymbol(string? level) => level switch
     {
@@ -87,7 +63,6 @@ public class GooglePlacesService
         _ => null
     };
 
-    // Private response DTOs
     private class PlacesResponse
     {
         [JsonPropertyName("places")] public List<PlaceResult>? Places { get; set; }
