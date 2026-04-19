@@ -38,12 +38,16 @@ public class GooglePlacesService
             priceLevels,
             minRating = 3.5,
             rankPreference = "RELEVANCE",
-            pageSize = 20
+            maxResultCount = 20
         };
 
         request.Content = JsonContent.Create(body);
         var response = await _http.SendAsync(request);
-        response.EnsureSuccessStatusCode();
+        if (!response.IsSuccessStatusCode)
+        {
+            var errorBody = await response.Content.ReadAsStringAsync();
+            throw new HttpRequestException($"Google Places API error {(int)response.StatusCode}: {errorBody}");
+        }
 
         var result = await response.Content.ReadFromJsonAsync<PlacesResponse>();
         return (result?.Places ?? [])
