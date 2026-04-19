@@ -19,10 +19,15 @@ public class GooglePlacesService
             "places.id,places.displayName,places.formattedAddress,places.rating," +
             "places.userRatingCount,places.priceLevel,places.websiteUri,places.photos");
 
+        var priceLevels = criteria.PriceRange.Count == 0
+            ? new List<string> { "PRICE_LEVEL_INEXPENSIVE", "PRICE_LEVEL_MODERATE", "PRICE_LEVEL_EXPENSIVE", "PRICE_LEVEL_VERY_EXPENSIVE" }
+            : criteria.PriceRange.Select(MapPriceLevel).ToList();
+
         var body = new
         {
             textQuery = $"{GetQueryPrefix(criteria.Cuisine)} restaurant Amsterdam",
-            maxResultCount = 20
+            maxResultCount = 20,
+            priceLevels
         };
 
         request.Content = JsonContent.Create(body);
@@ -53,6 +58,15 @@ public class GooglePlacesService
 
     private static string GetQueryPrefix(CuisineType cuisine) =>
         cuisine == CuisineType.Any ? string.Empty : cuisine.ToString().ToLower() + " ";
+
+    private static string MapPriceLevel(PriceLevel level) => level switch
+    {
+        PriceLevel.Budget => "PRICE_LEVEL_INEXPENSIVE",
+        PriceLevel.Moderate => "PRICE_LEVEL_MODERATE",
+        PriceLevel.Expensive => "PRICE_LEVEL_EXPENSIVE",
+        PriceLevel.VeryExpensive => "PRICE_LEVEL_VERY_EXPENSIVE",
+        _ => "PRICE_LEVEL_MODERATE"
+    };
 
     private static string? MapPriceLevelToSymbol(string? level) => level switch
     {
