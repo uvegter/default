@@ -4,7 +4,7 @@ public partial class App : MauiWinUIApplication
 {
     public App()
     {
-        InitializeComponent();
+        this.InitializeComponent();
     }
 
     protected override MauiApp CreateMauiApp() => MauiProgram.CreateMauiApp();
