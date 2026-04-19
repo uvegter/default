@@ -32,9 +32,9 @@
   </ItemGroup>
 
   <ItemGroup Condition="$(TargetFramework.Contains('-windows'))">
-    <MauiXaml Update="Platforms\Windows\App.xaml">
+    <ApplicationDefinition Include="AmsterdamEats.Maui\Platforms\Windows\App.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </MauiXaml>
+    </ApplicationDefinition>
   </ItemGroup>
 
 </Project>
