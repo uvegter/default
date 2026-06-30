@@ -1,0 +1,50 @@
+{
+  "show": "Pointless",
+  "surveyNote": "We asked 100 people. Scores reflect how many gave each answer. A score of 0 is POINTLESS.",
+  "questions": [
+    {
+      "id": "capitals-a",
+      "category": "World Capitals",
+      "question": "Name a country whose capital city begins with the letter 'A'.",
+      "answers": [
+        { "answer": "Afghanistan", "aliases": ["kabul"], "score": 41, "note": "Kabul" },
+        { "answer": "Egypt", "aliases": ["cairo"], "score": 8, "note": "Cairo" },
+        { "answer": "Greece", "aliases": ["athens"], "score": 27, "note": "Athens" },
+        { "answer": "Jordan", "aliases": ["amman"], "score": 3, "note": "Amman" },
+        { "answer": "Qatar", "aliases": ["doha", "ad dawhah"], "score": 0, "note": "Ad-Dawhah / Doha" },
+        { "answer": "Ghana", "aliases": ["accra"], "score": 5, "note": "Accra" },
+        { "answer": "Paraguay", "aliases": ["asuncion", "asunción"], "score": 1, "note": "Asunción" },
+        { "answer": "Eritrea", "aliases": ["asmara"], "score": 0, "note": "Asmara" }
+      ]
+    },
+    {
+      "id": "bond-actors",
+      "category": "Film",
+      "question": "Name an actor who has played James Bond in an official EON film.",
+      "answers": [
+        { "answer": "Sean Connery", "aliases": ["connery"], "score": 62, "note": "1962–1971, 1983" },
+        { "answer": "Roger Moore", "aliases": ["moore"], "score": 44, "note": "1973–1985" },
+        { "answer": "Daniel Craig", "aliases": ["craig"], "score": 51, "note": "2006–2021" },
+        { "answer": "Pierce Brosnan", "aliases": ["brosnan"], "score": 33, "note": "1995–2002" },
+        { "answer": "Timothy Dalton", "aliases": ["dalton"], "score": 9, "note": "1987–1989" },
+        { "answer": "George Lazenby", "aliases": ["lazenby"], "score": 2, "note": "1969" }
+      ]
+    },
+    {
+      "id": "elements",
+      "category": "Science",
+      "question": "Name a chemical element whose symbol does NOT start with the same letter as its English name.",
+      "answers": [
+        { "answer": "Sodium", "aliases": ["na", "natrium"], "score": 18, "note": "Na" },
+        { "answer": "Potassium", "aliases": ["k", "kalium"], "score": 12, "note": "K" },
+        { "answer": "Iron", "aliases": ["fe", "ferrum"], "score": 21, "note": "Fe" },
+        { "answer": "Gold", "aliases": ["au", "aurum"], "score": 15, "note": "Au" },
+        { "answer": "Lead", "aliases": ["pb", "plumbum"], "score": 7, "note": "Pb" },
+        { "answer": "Tin", "aliases": ["sn", "stannum"], "score": 1, "note": "Sn" },
+        { "answer": "Tungsten", "aliases": ["w", "wolfram"], "score": 0, "note": "W" },
+        { "answer": "Mercury", "aliases": ["hg", "hydrargyrum"], "score": 4, "note": "Hg" },
+        { "answer": "Antimony", "aliases": ["sb", "stibium"], "score": 0, "note": "Sb" }
+      ]
+    }
+  ]
+}
