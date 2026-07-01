@@ -1,11 +1,11 @@
 {
   "show": "Pointless",
-  "surveyNote": "We asked 100 people. Scores reflect how many gave each answer. A score of 0 is POINTLESS.",
+  "surveyNote": "We asked 100 people. Don't just name any correct answer — find the most obscure one you can. The fewer people who said it, the lower your score. A score of 0 is POINTLESS.",
   "questions": [
     {
       "id": "olympics-hosts",
       "category": "Sport",
-      "question": "Name a country that has hosted a Summer or Winter Olympics since 2000.",
+      "question": "Find the most obscure country you can that has hosted a Summer or Winter Olympics since 2000 — the fewer people who'd say it, the better.",
       "answers": [
         { "answer": "Australia", "score": 40 },
         { "answer": "Greece", "score": 47 },
@@ -24,7 +24,7 @@
     {
       "id": "coups-since-2000",
       "category": "World Affairs",
-      "question": "Name a country that has had a successful coup d'état since 2000.",
+      "question": "Find the most obscure country you can that has had a successful coup d'état since 2000 — the fewer people who'd say it, the better.",
       "answers": [
         { "answer": "Egypt", "score": 32 },
         { "answer": "Libya", "score": 22 },
@@ -57,7 +57,7 @@
     {
       "id": "top10-market-cap",
       "category": "Business",
-      "question": "Name a company that has been in the global top 10 by market cap since 2001.",
+      "question": "Find the most obscure company you can that has been in the global top 10 by market cap since 2001 — the fewer people who'd say it, the better.",
       "answers": [
         { "answer": "Apple", "score": 92 },
         { "answer": "Microsoft", "score": 86 },
@@ -92,7 +92,7 @@
     {
       "id": "grammy-aoty",
       "category": "Music",
-      "question": "Name an artist who has won the Grammy Award for Album of the Year since 2000.",
+      "question": "Find the most obscure artist you can who has won the Grammy Award for Album of the Year since 2000 — the fewer people who'd say it, the better.",
       "answers": [
         { "answer": "Steely Dan", "score": 12 },
         { "answer": "O Brother Where Art Thou soundtrack", "aliases": ["o brother"], "score": 4 },
@@ -120,7 +120,7 @@
     {
       "id": "priciest-auction-artists",
       "category": "Art",
-      "question": "Name an artist whose work is in the top 25 most expensive auction sales since 2001.",
+      "question": "Find the most obscure artist you can whose work is in the top 25 most expensive auction sales since 2001 — the fewer people who'd say it, the better.",
       "answers": [
         { "answer": "Leonardo da Vinci", "aliases": ["da vinci", "leonardo"], "score": 72 },
         { "answer": "Gustav Klimt", "aliases": ["klimt"], "score": 36 },
@@ -145,7 +145,7 @@
     {
       "id": "science-breakthroughs",
       "category": "Science",
-      "question": "Name a Science magazine Breakthrough of the Year since 2001.",
+      "question": "Find the most obscure Science magazine Breakthrough of the Year (since 2001) that you can — the fewer people who'd say it, the better.",
       "answers": [
         { "answer": "Nanocircuits", "score": 0 },
         { "answer": "RNA interference", "aliases": ["rnai", "rna"], "score": 2 },
