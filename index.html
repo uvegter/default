@@ -522,23 +522,24 @@ function setBoard(value) {
   fill.style.height = v + "%";
   fill.style.backgroundColor = colorFor(v);
 }
-// Constant descent speed (points per second) — the bar falls at the same pace
-// regardless of the final score, so you can't gauge where it will land; it just
-// keeps going and then stops dead. Slow, because the suspense is the whole point.
-const DROP_RATE = 8; // points per second
+// The bar follows ONE fixed descent curve anchored at zero: fast at the top,
+// decelerating more and more as it approaches 0 (like the real Pointless bar).
+// It simply stops when it reaches the answer's score. Because every answer rides
+// the identical curve, the speed at any given number is the same no matter the
+// final score — you can't gauge where it'll land. Slow, because it's all suspense.
+//   value(s) = 100 * (1 - s)^DECEL, where s = elapsed / FALL_MS (s in [0,1] is 100 -> 0)
+const FALL_MS = 12000; // time to crawl all the way to 0
+const DECEL = 2;       // higher = more pronounced slow-down near the bottom
 function animateCountdown(target) {
   return new Promise((resolve) => {
-    const start = 100;
-    const drop = start - target;
-    const duration = Math.max(1400, (drop / DROP_RATE) * 1000);
+    const sStop = 1 - Math.pow(Math.max(0, target) / 100, 1 / DECEL); // where the curve hits target
     let startTs = null;
     function frame(ts) {
       if (startTs === null) startTs = ts;
-      const t = Math.min(1, (ts - startTs) / duration);
-      const value = start - drop * t; // linear -> constant speed, abrupt stop
-      setBoard(value);
-      if (t < 1) requestAnimationFrame(frame);
-      else { setBoard(target); resolve(); }
+      const s = (ts - startTs) / FALL_MS; // absolute progress along the shared curve
+      if (s >= sStop) { setBoard(target); resolve(); return; }
+      setBoard(100 * Math.pow(1 - s, DECEL));
+      requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
   });
