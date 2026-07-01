@@ -20,12 +20,7 @@
   }
 
   * { box-sizing: border-box; }
-
-  html, body {
-    margin: 0;
-    height: 100%;
-    overflow: hidden;
-  }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
 
   body {
     font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
@@ -40,7 +35,6 @@
     user-select: none;
   }
 
-  /* spotlight sweep */
   body::before {
     content: "";
     position: fixed;
@@ -56,7 +50,7 @@
     position: relative;
     z-index: 2;
     text-align: center;
-    padding: 20px 34px 16px;
+    padding: 20px 34px 18px;
     border-bottom: 1px solid var(--panel-border);
     background: linear-gradient(180deg, rgba(0,0,0,0.4), transparent);
   }
@@ -72,13 +66,16 @@
     color: transparent;
     text-shadow: 0 2px 30px rgba(212,175,55,0.25);
   }
+  /* Anniversary line — bigger, gold and glowing */
   header .sub {
     display: block;
-    margin-top: 8px;
-    color: var(--muted);
-    font-size: clamp(11px, 1.4vw, 15px);
-    letter-spacing: 0.32em;
+    margin-top: 12px;
+    color: var(--gold-bright);
+    font-size: clamp(15px, 2.1vw, 26px);
+    letter-spacing: 0.34em;
     text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 0 22px rgba(212,175,55,0.55), 0 1px 0 rgba(0,0,0,0.4);
   }
 
   select, button, input {
@@ -94,10 +91,10 @@
   }
   select { cursor: pointer; width: 100%; }
   select:focus, input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
-
   button { cursor: pointer; letter-spacing: 0.06em; }
   button:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); }
   button:active { transform: translateY(1px); }
+  button:disabled { opacity: 0.45; cursor: default; }
   button.primary {
     background: linear-gradient(180deg, var(--gold-bright), var(--gold));
     color: #2a2207;
@@ -105,18 +102,85 @@
     font-weight: 700;
   }
   button.primary:hover { filter: brightness(1.06); }
+  button.ghost { color: var(--muted); }
 
+  /* ================= WHEEL (opening) ================= */
+  #wheelView {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 24px;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .wheelHint { color: var(--muted); letter-spacing: 0.24em; text-transform: uppercase; font-size: 13px; }
+  .wheelWrap {
+    position: relative;
+    width: min(58vh, 520px);
+    aspect-ratio: 1;
+    max-width: 92vw;
+  }
+  #wheel { width: 100%; height: 100%; display: block; filter: drop-shadow(0 20px 50px rgba(0,0,0,0.55)); }
+  .pointer {
+    position: absolute;
+    top: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-top: 30px solid var(--gold-bright);
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.6));
+    z-index: 3;
+  }
+  .hub {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24%; height: 24%;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, #9c7a1e);
+    color: #2a2207;
+    border: 3px solid #050608;
+    font-weight: 800;
+    font-size: clamp(14px, 2vw, 20px);
+    letter-spacing: 0.14em;
+    z-index: 2;
+    box-shadow: 0 0 24px rgba(212,175,55,0.5);
+  }
+  .hub:hover { filter: brightness(1.07); background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, #9c7a1e); border-color: #050608; }
+  .wheelControls { display: flex; gap: 12px; }
+
+  .resultCard, .completeCard {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 22px 26px;
+    max-width: 620px;
+    width: 100%;
+    text-align: center;
+    animation: slidein .35s ease;
+  }
+  .resultCard .qcat { color: var(--gold); letter-spacing: 0.24em; text-transform: uppercase; font-size: 13px; margin-bottom: 8px; }
+  .resultCard .qtext { font-size: clamp(18px, 2vw, 24px); font-weight: 600; margin: 0 0 18px; line-height: 1.3; }
+  .completeCard h2 { margin: 0 0 10px; color: var(--gold-bright); letter-spacing: 0.1em; }
+  .completeCard p { color: var(--muted); margin: 0 0 20px; }
+
+  /* ================= MAIN PAGE ================= */
   main {
     position: relative;
     z-index: 1;
     flex: 1;
-    display: grid;
+    display: none;
     grid-template-columns: 350px 1fr 350px;
     gap: 26px;
     padding: 28px 34px 34px;
     min-height: 0;
   }
-
   .panel {
     background: var(--panel);
     border: 1px solid var(--panel-border);
@@ -127,31 +191,17 @@
     min-height: 0;
     box-shadow: 0 30px 80px rgba(0,0,0,0.35) inset, 0 1px 0 rgba(255,255,255,0.04);
   }
+  .plabel { color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; font-size: 12px; margin-bottom: 12px; }
 
-  .plabel {
-    color: var(--gold);
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    font-size: 12px;
-    margin-bottom: 12px;
-  }
-
-  /* ---- LEFT: question + answer ---- */
   .qcat { color: var(--muted); letter-spacing: 0.24em; text-transform: uppercase; font-size: 11px; margin: 18px 0 8px; }
-  .qtext {
-    font-size: clamp(19px, 1.8vw, 26px);
-    line-height: 1.3;
-    font-weight: 600;
-    margin: 0;
-    flex: 1;
-  }
+  .qtext { font-size: clamp(19px, 1.8vw, 26px); line-height: 1.3; font-weight: 600; margin: 0; flex: 1; }
   .qsurvey { color: var(--muted); font-size: 12px; margin: 14px 0 18px; font-style: italic; }
   .answerRow { display: flex; flex-direction: column; gap: 10px; }
   #answerInput { font-size: 18px; padding: 15px 18px; text-transform: uppercase; letter-spacing: 0.02em; }
   #answerInput::placeholder { text-transform: none; letter-spacing: normal; }
   #answerInput:disabled { opacity: 0.5; }
+  #nextBtn { margin-top: 10px; width: 100%; }
 
-  /* ---- CENTER: vertical bar chart ---- */
   .stage {
     display: flex;
     flex-direction: column;
@@ -171,12 +221,7 @@
     color: transparent;
     transition: filter .2s;
   }
-  .chart {
-    display: flex;
-    gap: 16px;
-    align-items: stretch;
-    height: min(56vh, 520px);
-  }
+  .chart { display: flex; gap: 16px; align-items: stretch; height: min(56vh, 520px); }
   .barTrack {
     position: relative;
     width: clamp(90px, 10vw, 150px);
@@ -201,44 +246,22 @@
     background: linear-gradient(90deg, rgba(255,255,255,0.22), transparent 40%);
     pointer-events: none;
   }
-  .scale {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    color: var(--muted);
-    font-size: 11px;
-    letter-spacing: 0.12em;
-    text-align: left;
-    padding: 2px 0;
-  }
+  .scale { display: flex; flex-direction: column; justify-content: space-between; color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-align: left; padding: 2px 0; }
   .scale .zero { color: var(--gold); font-weight: 700; }
-  .verdict {
-    margin-top: 22px;
-    min-height: 26px;
-    font-size: 15px;
-    text-align: center;
-    max-width: 420px;
-  }
+  .verdict { margin-top: 22px; min-height: 26px; font-size: 15px; text-align: center; max-width: 420px; }
   .verdict .good { color: var(--green); }
   .verdict .meh { color: var(--orange); }
   .verdict .bad { color: var(--red); }
   .verdict .accepted { color: var(--gold-bright); font-weight: 700; }
   .statusLine { color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; margin-bottom: 6px; height: 16px; }
 
-  /* ---- RIGHT: round guesses ---- */
   .log { flex: 1; overflow-y: auto; min-height: 0; margin: 4px -6px 16px; padding: 0 6px; }
   .log::-webkit-scrollbar { width: 8px; }
   .log::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.25); border-radius: 8px; }
   .entry {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 12px 13px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 12px 13px; border-radius: 10px; margin-bottom: 8px;
+    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05);
     animation: slidein .3s ease;
   }
   @keyframes slidein { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
@@ -250,8 +273,8 @@
   .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 30px 10px; }
   #resetBtn { width: 100%; }
 
-  /* POINTLESS overlay */
-  .pointless {
+  /* ================= OVERLAYS ================= */
+  .overlay {
     position: fixed;
     inset: 0;
     z-index: 50;
@@ -259,27 +282,38 @@
     align-items: center;
     justify-content: center;
     flex-direction: column;
-    background: radial-gradient(circle at 50% 50%, rgba(212,175,55,0.16), rgba(0,0,0,0.86) 60%);
     backdrop-filter: blur(3px);
   }
-  .pointless.show { display: flex; animation: fadein .3s ease; }
+  .overlay.show { display: flex; animation: fadein .3s ease; }
   @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
-  .pointless h2 {
-    font-size: clamp(48px, 13vw, 170px);
-    letter-spacing: 0.16em;
+  .overlay h2 {
+    font-size: clamp(48px, 12vw, 160px);
+    letter-spacing: 0.12em;
     margin: 0;
     font-weight: 900;
     text-transform: uppercase;
-    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #7a5f17);
-    -webkit-background-clip: text;
-    background-clip: text;
-    color: transparent;
-    text-shadow: 0 0 60px rgba(212,175,55,0.5);
     animation: pop .6s cubic-bezier(.2,1.5,.4,1) both;
+    text-align: center;
+    line-height: 0.95;
   }
   @keyframes pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
-  .pointless p { color: var(--gold-bright); letter-spacing: 0.3em; text-transform: uppercase; margin-top: 8px; }
-  .pointless small { color: var(--muted); margin-top: 24px; letter-spacing: 0.2em; }
+  .overlay p { letter-spacing: 0.3em; text-transform: uppercase; margin-top: 10px; font-size: clamp(20px, 4vw, 44px); font-weight: 800; }
+  .overlay small { color: var(--muted); margin-top: 24px; letter-spacing: 0.2em; }
+
+  #pointlessOverlay { background: radial-gradient(circle at 50% 50%, rgba(212,175,55,0.16), rgba(0,0,0,0.86) 60%); }
+  #pointlessOverlay h2 {
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #7a5f17);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 0 60px rgba(212,175,55,0.5);
+  }
+  #pointlessOverlay p { color: var(--gold-bright); }
+
+  #failOverlay { background: radial-gradient(circle at 50% 50%, rgba(226,59,59,0.22), rgba(0,0,0,0.9) 62%); }
+  #failOverlay h2 {
+    color: #ff5a5a;
+    text-shadow: 0 0 50px rgba(226,59,59,0.6);
+  }
+  #failOverlay p { color: #ff9a9a; }
 
   .loading, .errbox { margin: auto; text-align: center; color: var(--muted); z-index: 2; }
   .errbox { color: var(--red); max-width: 540px; line-height: 1.5; }
@@ -298,12 +332,37 @@
   <span class="sub">Vegter 25th Anniversary Edition</span>
 </header>
 
-<main id="app" style="display:none">
+<!-- ===== OPENING: category wheel ===== -->
+<div id="wheelView">
+  <div id="wheelStage" style="display:flex; flex-direction:column; align-items:center; gap:22px;">
+    <div class="wheelHint">Spin to choose a category</div>
+    <div class="wheelWrap">
+      <div class="pointer"></div>
+      <svg id="wheel" viewBox="0 0 300 300" aria-label="Category wheel"></svg>
+      <button id="spinBtn" class="hub">SPIN</button>
+    </div>
+    <div class="resultCard" id="resultCard" style="display:none">
+      <div class="qcat" id="rCat"></div>
+      <p class="qtext" id="rText"></p>
+      <button id="playBtn" class="primary">Play this question ▸</button>
+    </div>
+  </div>
 
-  <!-- LEFT: question + answer -->
+  <div class="completeCard" id="completeCard" style="display:none">
+    <h2>Session complete!</h2>
+    <p>You've played all the categories.</p>
+    <button id="restartCompleteBtn" class="primary">Restart session</button>
+  </div>
+
+  <div class="wheelControls">
+    <button id="restartBtn" class="ghost">⟲ Restart session</button>
+  </div>
+</div>
+
+<!-- ===== MAIN PAGE ===== -->
+<main id="app">
   <section class="panel">
     <div class="plabel">The question</div>
-    <select id="questionSelect" aria-label="Choose a question"></select>
     <div class="qcat" id="qCat"></div>
     <p class="qtext" id="qText"></p>
     <div class="qsurvey" id="qSurvey"></div>
@@ -311,24 +370,21 @@
       <input id="answerInput" type="text" placeholder="Type your answer…" autocomplete="off" />
       <button id="submitBtn" class="primary">Lock it in</button>
     </div>
+    <button id="nextBtn" class="ghost">Next category ▸</button>
   </section>
 
-  <!-- CENTER: vertical bar chart -->
   <section class="stage">
     <div class="statusLine" id="statusLine">Awaiting your answer</div>
     <div class="bigScore" id="bigScore">100</div>
     <div class="chart">
       <div class="barTrack"><div class="barFill" id="barFill"></div></div>
       <div class="scale">
-        <span>100</span>
-        <span>50</span>
-        <span class="zero">0 · POINTLESS</span>
+        <span>100</span><span>50</span><span class="zero">0 · POINTLESS</span>
       </div>
     </div>
     <div class="verdict" id="verdict"></div>
   </section>
 
-  <!-- RIGHT: this round's guesses -->
   <section class="panel">
     <div class="plabel">This round</div>
     <div class="log" id="log">
@@ -336,15 +392,20 @@
     </div>
     <button id="resetBtn">⟲ Reset round</button>
   </section>
-
 </main>
 
 <div class="loading" id="loading">Loading question database…</div>
 
-<div class="pointless" id="pointlessOverlay">
+<div class="overlay" id="pointlessOverlay">
   <h2>Pointless!</h2>
   <p>A perfect answer</p>
   <small id="pointlessSub">Nobody said it. Click anywhere to continue.</small>
+</div>
+
+<div class="overlay" id="failOverlay">
+  <h2>Not on the board</h2>
+  <p>You suck!</p>
+  <small>Click anywhere to try again.</small>
 </div>
 
 <script>
@@ -353,22 +414,28 @@
 const state = {
   db: null,
   currentQ: null,
+  currentIndex: null,   // index in db.questions of the question being played
+  selectedIndex: null,  // index the wheel landed on
+  remaining: [],        // question indices still to play (random order)
   answered: new Set(),
   round: [],
-  animating: false,
+  busy: false,          // blocks input during suspense/animation
+  wheelRot: 0,
+  spinning: false,
 };
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 
 /* ---------- Fuzzy matching ---------- */
 function normalize(str) {
   return str
     .toLowerCase()
-    .normalize("NFD").replace(/[̀-ͯ]/g, "") // strip accents
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
     .replace(/[^a-z0-9 ]/g, " ")
     .replace(/\b(the|a|an|of|and|st|saint)\b/g, " ")
     .replace(/\s+/g, " ")
     .trim();
 }
-
 function levenshtein(a, b) {
   if (a === b) return 0;
   if (!a.length) return b.length;
@@ -384,14 +451,10 @@ function levenshtein(a, b) {
   }
   return prev[b.length];
 }
-
-// Return the best matching answer object, or null.
 function fuzzyMatch(input, question) {
   const q = normalize(input);
   if (!q) return null;
-  let best = null;
-  let bestDist = Infinity;
-
+  let best = null, bestDist = Infinity;
   for (const ans of question.answers) {
     const candidates = [ans.answer, ...(ans.aliases || [])];
     for (const cand of candidates) {
@@ -399,16 +462,10 @@ function fuzzyMatch(input, question) {
       if (!c) continue;
       let dist;
       if (c === q) dist = 0;
-      // any typed term contained in the answer (or vice-versa) counts, e.g. "monet" -> "Claude Monet".
-      // require >= 3 chars so stray letters don't match everything.
       else if (q.length >= 3 && (c.includes(q) || q.includes(c))) dist = 1;
       else dist = levenshtein(q, c);
-
       const tolerance = Math.max(1, Math.floor(c.length * 0.34));
-      if (dist <= tolerance && dist < bestDist) {
-        bestDist = dist;
-        best = ans;
-      }
+      if (dist <= tolerance && dist < bestDist) { bestDist = dist; best = ans; }
     }
   }
   return best;
@@ -420,14 +477,12 @@ function lerp(a, b, t) { return a + (b - a) * t; }
 function mix(c1, c2, t) {
   return `rgb(${Math.round(lerp(c1[0], c2[0], t))},${Math.round(lerp(c1[1], c2[1], t))},${Math.round(lerp(c1[2], c2[2], t))})`;
 }
-// color from 100 -> 0: red -> orange -> green, pure gold exactly at 0
 function colorFor(value) {
   if (value <= 0.0001) return `rgb(${GOLD.join(",")})`;
   const v = Math.max(0, Math.min(100, value));
   if (v > 50) return mix(ORANGE, RED, (v - 50) / 50);
   return mix(GREEN, ORANGE, v / 50);
 }
-
 function setBoard(value) {
   const v = Math.max(0, value);
   document.getElementById("bigScore").textContent = Math.round(v);
@@ -435,15 +490,12 @@ function setBoard(value) {
   fill.style.height = v + "%";
   fill.style.backgroundColor = colorFor(v);
 }
-
-// ease-out so the number decelerates as it drops toward the final score
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
-
 function animateCountdown(target) {
   return new Promise((resolve) => {
-    state.animating = true;
     const start = 100;
-    const duration = 1600 + (start - target) * 28; // ~1.6s .. ~4.4s (bigger drops take longer)
+    // Slow, suspenseful descent; bigger drops take a lot longer.
+    const duration = 3200 + (start - target) * 55; // ~3.4s .. ~8.7s
     let startTs = null;
     function frame(ts) {
       if (startTs === null) startTs = ts;
@@ -451,13 +503,148 @@ function animateCountdown(target) {
       const value = start - (start - target) * easeOutCubic(t);
       setBoard(value);
       if (t < 1) requestAnimationFrame(frame);
-      else { setBoard(target); state.animating = false; resolve(); }
+      else { setBoard(target); resolve(); }
     }
     requestAnimationFrame(frame);
   });
 }
 
-/* ---------- Rendering ---------- */
+/* ---------- Wheel ---------- */
+const SVGNS = "http://www.w3.org/2000/svg";
+const SEG_FILLS = ["#1b1e28", "#2b2613"];
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pointOnCircle(angleDeg, r) {
+  const rad = angleDeg * Math.PI / 180;      // clockwise from top
+  return [150 + r * Math.sin(rad), 150 - r * Math.cos(rad)];
+}
+function drawWheel(indices) {
+  const svg = document.getElementById("wheel");
+  svg.innerHTML = "";
+  const n = indices.length;
+  const seg = 360 / n;
+  const R = 142;
+  for (let i = 0; i < n; i++) {
+    const start = i * seg, end = (i + 1) * seg;
+    const [x1, y1] = pointOnCircle(start, R);
+    const [x2, y2] = pointOnCircle(end, R);
+    const large = seg > 180 ? 1 : 0;
+    const path = document.createElementNS(SVGNS, "path");
+    path.setAttribute("d", `M150,150 L${x1.toFixed(2)},${y1.toFixed(2)} A${R},${R} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)} Z`);
+    path.setAttribute("fill", SEG_FILLS[i % SEG_FILLS.length]);
+    path.setAttribute("stroke", "rgba(212,175,55,0.55)");
+    path.setAttribute("stroke-width", "1.5");
+    svg.appendChild(path);
+
+    const mid = start + seg / 2;
+    const [lx, ly] = pointOnCircle(mid, R * 0.62);
+    const label = document.createElementNS(SVGNS, "text");
+    label.setAttribute("x", lx.toFixed(2));
+    label.setAttribute("y", ly.toFixed(2));
+    label.setAttribute("text-anchor", "middle");
+    label.setAttribute("dominant-baseline", "middle");
+    label.setAttribute("fill", "#ffe17a");
+    label.setAttribute("font-size", n > 4 ? "13" : "16");
+    label.setAttribute("font-weight", "700");
+    label.setAttribute("letter-spacing", "0.5");
+    label.textContent = state.db.questions[indices[i]].category;
+    svg.appendChild(label);
+  }
+  const rim = document.createElementNS(SVGNS, "circle");
+  rim.setAttribute("cx", "150"); rim.setAttribute("cy", "150"); rim.setAttribute("r", String(R));
+  rim.setAttribute("fill", "none"); rim.setAttribute("stroke", "var(--gold)"); rim.setAttribute("stroke-width", "3");
+  svg.appendChild(rim);
+}
+
+function showWheel() {
+  document.getElementById("app").style.display = "none";
+  document.getElementById("wheelView").style.display = "flex";
+  document.getElementById("resultCard").style.display = "none";
+
+  const stage = document.getElementById("wheelStage");
+  const complete = document.getElementById("completeCard");
+  if (state.remaining.length === 0) {
+    stage.style.display = "none";
+    complete.style.display = "block";
+    return;
+  }
+  stage.style.display = "flex";
+  complete.style.display = "none";
+
+  drawWheel(state.remaining);
+  const wheel = document.getElementById("wheel");
+  wheel.style.transition = "none";
+  wheel.style.transform = "rotate(0deg)";
+  void wheel.getBoundingClientRect();
+  state.wheelRot = 0;
+  document.getElementById("spinBtn").disabled = false;
+}
+
+function spin() {
+  if (state.spinning || state.remaining.length === 0) return;
+  state.spinning = true;
+  document.getElementById("spinBtn").disabled = true;
+  document.getElementById("resultCard").style.display = "none";
+
+  const n = state.remaining.length;
+  const seg = 360 / n;
+  const pos = Math.floor(Math.random() * n);
+  const jitter = (Math.random() - 0.5) * seg * 0.55;
+  const center = pos * seg + seg / 2 + jitter;
+  const desiredMod = ((360 - center) % 360 + 360) % 360;
+  const delta = 4 * 360 + (((desiredMod - (state.wheelRot % 360)) % 360) + 360) % 360;
+  const newRot = state.wheelRot + delta;
+  state.wheelRot = newRot;
+
+  const wheel = document.getElementById("wheel");
+  wheel.style.transition = "transform 4.8s cubic-bezier(.16,.85,.28,1)";
+  wheel.style.transform = `rotate(${newRot}deg)`;
+  wheel.addEventListener("transitionend", () => {
+    state.spinning = false;
+    document.getElementById("spinBtn").disabled = false;
+    revealResult(state.remaining[pos]);
+  }, { once: true });
+}
+
+function revealResult(qIndex) {
+  state.selectedIndex = qIndex;
+  const q = state.db.questions[qIndex];
+  document.getElementById("rCat").textContent = q.category || "";
+  document.getElementById("rText").textContent = q.question;
+  document.getElementById("resultCard").style.display = "block";
+}
+
+function playSelected() {
+  if (state.selectedIndex == null) return;
+  state.currentIndex = state.selectedIndex;
+  document.getElementById("wheelView").style.display = "none";
+  document.getElementById("app").style.display = "grid";
+  loadQuestion(state.db.questions[state.currentIndex]);
+}
+
+function nextCategory() {
+  // mark the just-played category as done, then back to the wheel
+  state.remaining = state.remaining.filter((i) => i !== state.currentIndex);
+  state.currentIndex = null;
+  state.selectedIndex = null;
+  showWheel();
+}
+
+function restartSession() {
+  state.remaining = shuffle(state.db.questions.map((_, i) => i));
+  state.currentIndex = null;
+  state.selectedIndex = null;
+  showWheel();
+}
+
+/* ---------- Main page rendering ---------- */
 function loadQuestion(q) {
   state.currentQ = q;
   state.answered = new Set();
@@ -475,7 +662,6 @@ function loadQuestion(q) {
   document.getElementById("statusLine").textContent = "Awaiting your answer";
   document.getElementById("verdict").innerHTML = "";
 }
-
 function renderLog() {
   const log = document.getElementById("log");
   if (!state.round.length) {
@@ -483,7 +669,7 @@ function renderLog() {
     return;
   }
   log.innerHTML = "";
-  for (let i = state.round.length - 1; i >= 0; i--) { // newest first
+  for (let i = state.round.length - 1; i >= 0; i--) {
     const e = state.round[i];
     const div = document.createElement("div");
     div.className = "entry" + (e.zero ? " zero" : "");
@@ -494,15 +680,14 @@ function renderLog() {
     log.appendChild(div);
   }
 }
-
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, (c) =>
     ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
 }
 
-/* ---------- Submit flow ---------- */
+/* ---------- Submit flow (with suspense) ---------- */
 async function submitAnswer() {
-  if (state.animating) return;
+  if (state.busy) return;
   const input = document.getElementById("answerInput");
   const raw = input.value.trim();
   const verdict = document.getElementById("verdict");
@@ -511,23 +696,29 @@ async function submitAnswer() {
 
   const match = fuzzyMatch(raw, state.currentQ);
 
-  if (!match) {
-    setBoard(100);
-    verdict.innerHTML = '<span class="bad">✗ “' + escapeHtml(raw) + '” isn\'t on our board — that\'s the maximum 100.</span>';
-    status.textContent = "Not on the board";
-    flashScore();
-    input.select();
-    return;
-  }
-  if (state.answered.has(match.answer)) {
+  if (match && state.answered.has(match.answer)) {
     verdict.innerHTML = '<span class="meh">“' + escapeHtml(match.answer) + '” is already on the board this round.</span>';
     status.textContent = "Already given";
     input.select();
     return;
   }
 
+  // Lock it in, then hold for suspense before revealing anything.
+  state.busy = true;
   input.disabled = true;
   document.getElementById("submitBtn").disabled = true;
+  verdict.innerHTML = "";
+  status.textContent = "Locking it in…";
+  await sleep(2000);
+
+  if (!match) {
+    setBoard(100);
+    status.textContent = "Not on the board";
+    showFail();
+    finishTurn();
+    return;
+  }
+
   status.textContent = "Counting down…";
   verdict.innerHTML = '<span class="accepted">✓ ' + escapeHtml(match.answer) + '</span>' +
     (match.note ? ' <span style="color:var(--muted)">— ' + escapeHtml(match.note) + '</span>' : '');
@@ -552,51 +743,49 @@ async function submitAnswer() {
   else if (match.score <= 45) { status.textContent = "Solid"; verdict.innerHTML += ' <span class="meh">— middling.</span>'; }
   else { status.textContent = "Ouch"; verdict.innerHTML += ' <span class="bad">— a high, popular answer.</span>'; }
 
+  finishTurn();
+}
+
+function finishTurn() {
+  state.busy = false;
+  const input = document.getElementById("answerInput");
   input.disabled = false;
   document.getElementById("submitBtn").disabled = false;
   input.value = "";
   input.focus();
 }
 
-function flashScore() {
-  const el = document.getElementById("bigScore");
-  el.style.transition = "none";
-  el.style.webkitTextFillColor = "var(--red)";
-  setTimeout(() => { el.style.webkitTextFillColor = ""; el.style.transition = ""; }, 350);
-}
-
 function showPointless(match) {
-  const overlay = document.getElementById("pointlessOverlay");
   document.getElementById("pointlessSub").textContent =
     (match.note ? match.note + " — n" : "N") + "obody said it. Click anywhere to continue.";
-  overlay.classList.add("show");
+  document.getElementById("pointlessOverlay").classList.add("show");
+}
+function showFail() {
+  document.getElementById("failOverlay").classList.add("show");
 }
 
 /* ---------- Wiring ---------- */
-function populateSelect() {
-  const sel = document.getElementById("questionSelect");
-  sel.innerHTML = "";
-  state.db.questions.forEach((q, i) => {
-    const opt = document.createElement("option");
-    opt.value = String(i);
-    opt.textContent = (q.category ? q.category + " — " : "") +
-      (q.question.length > 52 ? q.question.slice(0, 49) + "…" : q.question);
-    sel.appendChild(opt);
-  });
-  sel.addEventListener("change", () => loadQuestion(state.db.questions[Number(sel.value)]));
-}
-
-function resetRound() { if (state.currentQ) loadQuestion(state.currentQ); }
-
 function wireEvents() {
+  document.getElementById("spinBtn").addEventListener("click", spin);
+  document.getElementById("playBtn").addEventListener("click", playSelected);
+  document.getElementById("restartBtn").addEventListener("click", restartSession);
+  document.getElementById("restartCompleteBtn").addEventListener("click", restartSession);
+  document.getElementById("nextBtn").addEventListener("click", nextCategory);
+
   document.getElementById("submitBtn").addEventListener("click", submitAnswer);
   document.getElementById("answerInput").addEventListener("keydown", (e) => {
     if (e.key === "Enter") { e.preventDefault(); submitAnswer(); }
   });
-  document.getElementById("resetBtn").addEventListener("click", resetRound);
-  const overlay = document.getElementById("pointlessOverlay");
-  overlay.addEventListener("click", () => overlay.classList.remove("show"));
-  document.addEventListener("keydown", (e) => { if (e.key === "Escape") overlay.classList.remove("show"); });
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (state.currentQ) loadQuestion(state.currentQ);
+  });
+
+  document.querySelectorAll(".overlay").forEach((ov) => {
+    ov.addEventListener("click", () => ov.classList.remove("show"));
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") document.querySelectorAll(".overlay.show").forEach((o) => o.classList.remove("show"));
+  });
 }
 
 /* ---------- Boot ---------- */
@@ -608,10 +797,8 @@ async function boot() {
     if (!db.questions || !db.questions.length) throw new Error("No questions in database.");
     state.db = db;
     document.getElementById("loading").style.display = "none";
-    document.getElementById("app").style.display = "grid";
-    populateSelect();
     wireEvents();
-    loadQuestion(db.questions[0]);
+    restartSession(); // opens the full wheel
   } catch (err) {
     const loading = document.getElementById("loading");
     loading.className = "errbox";
