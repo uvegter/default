@@ -121,9 +121,9 @@
   .wheelHint { color: var(--muted); letter-spacing: 0.24em; text-transform: uppercase; font-size: 13px; }
   .wheelWrap {
     position: relative;
-    width: min(58vh, 520px);
+    width: min(52vh, 470px);
     aspect-ratio: 1;
-    max-width: 92vw;
+    max-width: 88vw;
   }
   #wheel { width: 100%; height: 100%; display: block; filter: drop-shadow(0 20px 50px rgba(0,0,0,0.55)); }
   .pointer {
@@ -153,20 +153,45 @@
     box-shadow: 0 0 24px rgba(212,175,55,0.5);
   }
   .hub:hover { filter: brightness(1.07); background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, #9c7a1e); border-color: #050608; }
+  /* keep the hub centred on press (don't let the global button:active clobber the centring transform) */
+  .hub:active { transform: translate(-50%, calc(-50% + 1px)); }
   .wheelControls { display: flex; gap: 12px; }
+
+  /* stage area holds wheel + result card so they can cross-glide */
+  #stageArea {
+    position: relative;
+    width: 100%;
+    max-width: 920px;
+    height: min(64vh, 580px);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    transition: transform .6s cubic-bezier(.22,.9,.3,1), opacity .5s ease;
+  }
+  .slide.in { transform: translateX(0); opacity: 1; }
+  .slide.out-left { transform: translateX(-135%); opacity: 0; }
+  .slide.out-right { transform: translateX(135%); opacity: 0; }
+  .slide:not(.in) { pointer-events: none; }
 
   .resultCard, .completeCard {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 16px;
-    padding: 22px 26px;
-    max-width: 620px;
+    padding: 30px 34px;
+    max-width: 760px;
     width: 100%;
     text-align: center;
-    animation: slidein .35s ease;
   }
-  .resultCard .qcat { color: var(--gold); letter-spacing: 0.24em; text-transform: uppercase; font-size: 13px; margin-bottom: 8px; }
-  .resultCard .qtext { font-size: clamp(18px, 2vw, 24px); font-weight: 600; margin: 0 0 18px; line-height: 1.3; }
+  .resultCard .qcat { color: var(--gold); letter-spacing: 0.28em; text-transform: uppercase; font-size: 15px; margin-bottom: 14px; }
+  .resultCard .qtext { font-size: clamp(26px, 3.6vw, 48px); font-weight: 700; margin: 0 0 26px; line-height: 1.22; }
+  .resultBtns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .resultBtns button { padding: 14px 26px; font-size: 16px; }
   .completeCard h2 { margin: 0 0 10px; color: var(--gold-bright); letter-spacing: 0.1em; }
   .completeCard p { color: var(--muted); margin: 0 0 20px; }
 
@@ -334,17 +359,24 @@
 
 <!-- ===== OPENING: category wheel ===== -->
 <div id="wheelView">
-  <div id="wheelStage" style="display:flex; flex-direction:column; align-items:center; gap:22px;">
-    <div class="wheelHint">Spin to choose a category</div>
-    <div class="wheelWrap">
-      <div class="pointer"></div>
-      <svg id="wheel" viewBox="0 0 300 300" aria-label="Category wheel"></svg>
-      <button id="spinBtn" class="hub">SPIN</button>
+  <div id="stageArea">
+    <div class="slide in" id="wheelSlide">
+      <div class="wheelHint">Spin to choose a category</div>
+      <div class="wheelWrap">
+        <div class="pointer"></div>
+        <svg id="wheel" viewBox="0 0 300 300" aria-label="Category wheel"></svg>
+        <button id="spinBtn" class="hub">SPIN</button>
+      </div>
     </div>
-    <div class="resultCard" id="resultCard" style="display:none">
-      <div class="qcat" id="rCat"></div>
-      <p class="qtext" id="rText"></p>
-      <button id="playBtn" class="primary">Play this question ▸</button>
+    <div class="slide out-right" id="resultSlide">
+      <div class="resultCard" id="resultCard">
+        <div class="qcat" id="rCat"></div>
+        <p class="qtext" id="rText"></p>
+        <div class="resultBtns">
+          <button id="playBtn" class="primary">Play question ▸</button>
+          <button id="respinBtn" class="ghost">↻ Respin</button>
+        </div>
+      </div>
     </div>
   </div>
 
@@ -525,12 +557,25 @@ function pointOnCircle(angleDeg, r) {
   const rad = angleDeg * Math.PI / 180;      // clockwise from top
   return [150 + r * Math.sin(rad), 150 - r * Math.cos(rad)];
 }
+// SVG arc path between two angles (clockwise from top) at radius r
+function arcPath(a1, a2, r) {
+  const [x1, y1] = pointOnCircle(a1, r);
+  const [x2, y2] = pointOnCircle(a2, r);
+  const delta = a2 - a1;
+  const large = Math.abs(delta) > 180 ? 1 : 0;
+  const sweep = delta >= 0 ? 1 : 0;
+  return `M${x1.toFixed(2)},${y1.toFixed(2)} A${r.toFixed(2)},${r.toFixed(2)} 0 ${large} ${sweep} ${x2.toFixed(2)},${y2.toFixed(2)}`;
+}
 function drawWheel(indices) {
   const svg = document.getElementById("wheel");
   svg.innerHTML = "";
+  const defs = document.createElementNS(SVGNS, "defs");
+  svg.appendChild(defs);
   const n = indices.length;
   const seg = 360 / n;
   const R = 142;
+
+  // wedges
   for (let i = 0; i < n; i++) {
     const start = i * seg, end = (i + 1) * seg;
     const [x1, y1] = pointOnCircle(start, R);
@@ -542,42 +587,77 @@ function drawWheel(indices) {
     path.setAttribute("stroke", "rgba(212,175,55,0.55)");
     path.setAttribute("stroke-width", "1.5");
     svg.appendChild(path);
-
-    const mid = start + seg / 2;
-    const [lx, ly] = pointOnCircle(mid, R * 0.62);
-    const label = document.createElementNS(SVGNS, "text");
-    label.setAttribute("x", lx.toFixed(2));
-    label.setAttribute("y", ly.toFixed(2));
-    label.setAttribute("text-anchor", "middle");
-    label.setAttribute("dominant-baseline", "middle");
-    label.setAttribute("fill", "#ffe17a");
-    label.setAttribute("font-size", n > 4 ? "13" : "16");
-    label.setAttribute("font-weight", "700");
-    label.setAttribute("letter-spacing", "0.5");
-    label.textContent = state.db.questions[indices[i]].category;
-    svg.appendChild(label);
   }
+
+  // curved labels that follow each wedge's arc near the rim
+  const labelR = R * 0.82;
+  for (let i = 0; i < n; i++) {
+    const start = i * seg, end = (i + 1) * seg;
+    const mid = start + seg / 2;
+    const bottomHalf = mid > 90 && mid < 270; // flip so text stays upright
+    const pad = Math.min(seg * 0.14, 10);
+    const d = bottomHalf
+      ? arcPath(end - pad, start + pad, labelR)   // reversed -> upright on the bottom
+      : arcPath(start + pad, end - pad, labelR);
+
+    const arcId = "lbl" + i;
+    const arc = document.createElementNS(SVGNS, "path");
+    arc.setAttribute("id", arcId);
+    arc.setAttribute("d", d);
+    arc.setAttribute("fill", "none");
+    defs.appendChild(arc);
+
+    const cat = state.db.questions[indices[i]].category;
+    // shrink long labels so they never overflow (get clipped by) their arc
+    const base = n > 4 ? 13 : 15.5;
+    const availLen = ((seg - 2 * pad) * Math.PI / 180) * labelR;
+    const fontSize = Math.max(9, Math.min(base, availLen / (cat.length * 0.64)));
+
+    const text = document.createElementNS(SVGNS, "text");
+    text.setAttribute("fill", "#ffe17a");
+    text.setAttribute("font-size", fontSize.toFixed(1));
+    text.setAttribute("font-weight", "700");
+    text.setAttribute("letter-spacing", "0.4");
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("dominant-baseline", "middle");
+    const tp = document.createElementNS(SVGNS, "textPath");
+    tp.setAttribute("href", "#" + arcId);
+    tp.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + arcId);
+    tp.setAttribute("startOffset", "50%");
+    tp.textContent = cat;
+    text.appendChild(tp);
+    svg.appendChild(text);
+  }
+
   const rim = document.createElementNS(SVGNS, "circle");
   rim.setAttribute("cx", "150"); rim.setAttribute("cy", "150"); rim.setAttribute("r", String(R));
   rim.setAttribute("fill", "none"); rim.setAttribute("stroke", "var(--gold)"); rim.setAttribute("stroke-width", "3");
   svg.appendChild(rim);
 }
 
+// glide the wheel back in / result card off to the right
+function resetSlides() {
+  const ws = document.getElementById("wheelSlide");
+  const rs = document.getElementById("resultSlide");
+  ws.className = "slide in";
+  rs.className = "slide out-right";
+}
+
 function showWheel() {
   document.getElementById("app").style.display = "none";
   document.getElementById("wheelView").style.display = "flex";
-  document.getElementById("resultCard").style.display = "none";
 
-  const stage = document.getElementById("wheelStage");
+  const stage = document.getElementById("stageArea");
   const complete = document.getElementById("completeCard");
   if (state.remaining.length === 0) {
     stage.style.display = "none";
     complete.style.display = "block";
     return;
   }
-  stage.style.display = "flex";
+  stage.style.display = "block";
   complete.style.display = "none";
 
+  resetSlides();
   drawWheel(state.remaining);
   const wheel = document.getElementById("wheel");
   wheel.style.transition = "none";
@@ -591,7 +671,9 @@ function spin() {
   if (state.spinning || state.remaining.length === 0) return;
   state.spinning = true;
   document.getElementById("spinBtn").disabled = true;
-  document.getElementById("resultCard").style.display = "none";
+  // make sure the wheel is showing and the result card is tucked away
+  document.getElementById("wheelSlide").className = "slide in";
+  document.getElementById("resultSlide").className = "slide out-right";
 
   const n = state.remaining.length;
   const seg = 360 / n;
@@ -618,7 +700,17 @@ function revealResult(qIndex) {
   const q = state.db.questions[qIndex];
   document.getElementById("rCat").textContent = q.category || "";
   document.getElementById("rText").textContent = q.question;
-  document.getElementById("resultCard").style.display = "block";
+  // wheel glides off to the left, big question card glides in from the right
+  document.getElementById("wheelSlide").className = "slide out-left";
+  document.getElementById("resultSlide").className = "slide in";
+}
+
+function respin() {
+  if (state.spinning) return;
+  // question card glides back out to the right, wheel glides back in, then spin
+  document.getElementById("resultSlide").className = "slide out-right";
+  document.getElementById("wheelSlide").className = "slide in";
+  setTimeout(spin, 640);
 }
 
 function playSelected() {
@@ -768,6 +860,7 @@ function showFail() {
 function wireEvents() {
   document.getElementById("spinBtn").addEventListener("click", spin);
   document.getElementById("playBtn").addEventListener("click", playSelected);
+  document.getElementById("respinBtn").addEventListener("click", respin);
   document.getElementById("restartBtn").addEventListener("click", restartSession);
   document.getElementById("restartCompleteBtn").addEventListener("click", restartSession);
   document.getElementById("nextBtn").addEventListener("click", nextCategory);
