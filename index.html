@@ -162,7 +162,8 @@
     gap: 12px;
     margin-top: 22px;
   }
-  .answerRow input { flex: 1; font-size: 18px; padding: 15px 18px; }
+  .answerRow input { flex: 1; font-size: 18px; padding: 15px 18px; text-transform: uppercase; letter-spacing: 0.02em; }
+  .answerRow input::placeholder { text-transform: none; letter-spacing: normal; }
   .answerRow input:disabled { opacity: 0.5; }
 
   /* The big board */
@@ -462,7 +463,9 @@ function fuzzyMatch(input, question) {
       if (!c) continue;
       let dist;
       if (c === q) dist = 0;
-      else if (c.includes(q) || q.includes(c)) dist = 1; // substring tolerance
+      // any typed term contained in the answer (or vice-versa) counts, e.g. "monet" -> "Claude Monet".
+      // require >= 3 chars so stray letters don't match everything.
+      else if (q.length >= 3 && (c.includes(q) || q.includes(c))) dist = 1;
       else dist = levenshtein(q, c);
 
       // tolerance scales with length of the target word
