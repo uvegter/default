@@ -522,17 +522,20 @@ function setBoard(value) {
   fill.style.height = v + "%";
   fill.style.backgroundColor = colorFor(v);
 }
-function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
+// Constant descent speed (points per second) — the bar falls at the same pace
+// regardless of the final score, so you can't gauge where it will land; it just
+// keeps going and then stops dead. Slow, because the suspense is the whole point.
+const DROP_RATE = 8; // points per second
 function animateCountdown(target) {
   return new Promise((resolve) => {
     const start = 100;
-    // Slow, suspenseful descent; bigger drops take a lot longer.
-    const duration = 3200 + (start - target) * 55; // ~3.4s .. ~8.7s
+    const drop = start - target;
+    const duration = Math.max(1400, (drop / DROP_RATE) * 1000);
     let startTs = null;
     function frame(ts) {
       if (startTs === null) startTs = ts;
       const t = Math.min(1, (ts - startTs) / duration);
-      const value = start - (start - target) * easeOutCubic(t);
+      const value = start - drop * t; // linear -> constant speed, abrupt stop
       setBoard(value);
       if (t < 1) requestAnimationFrame(frame);
       else { setBoard(target); resolve(); }

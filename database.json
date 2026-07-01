@@ -7,18 +7,18 @@
       "category": "Sport",
       "question": "Name a country that has hosted a Summer or Winter Olympics since 2000.",
       "answers": [
-        { "answer": "Australia", "score": 52 },
-        { "answer": "Greece", "score": 60 },
-        { "answer": "China", "score": 82 },
-        { "answer": "United Kingdom", "aliases": ["uk", "britain", "great britain", "england"], "score": 90 },
-        { "answer": "Brazil", "score": 70 },
-        { "answer": "Japan", "score": 64 },
-        { "answer": "France", "score": 88 },
-        { "answer": "USA", "aliases": ["us", "united states", "america", "united states of america"], "score": 66 },
-        { "answer": "Italy", "score": 44 },
-        { "answer": "Canada", "score": 48 },
-        { "answer": "Russia", "score": 66 },
-        { "answer": "South Korea", "aliases": ["korea"], "score": 34 }
+        { "answer": "Australia", "score": 40 },
+        { "answer": "Greece", "score": 47 },
+        { "answer": "China", "score": 68 },
+        { "answer": "United Kingdom", "aliases": ["uk", "britain", "great britain", "england"], "score": 76 },
+        { "answer": "Brazil", "score": 56 },
+        { "answer": "Japan", "score": 50 },
+        { "answer": "France", "score": 74 },
+        { "answer": "USA", "aliases": ["us", "united states", "america", "united states of america"], "score": 52 },
+        { "answer": "Italy", "score": 32 },
+        { "answer": "Canada", "score": 36 },
+        { "answer": "Russia", "score": 52 },
+        { "answer": "South Korea", "aliases": ["korea"], "score": 24 }
       ]
     },
     {
