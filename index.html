@@ -1,0 +1,914 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pointless — Vegter 25th Anniversary Edition</title>
+<style>
+  :root {
+    --bg: #050608;
+    --bg-2: #0b0e14;
+    --panel: rgba(255, 255, 255, 0.035);
+    --panel-border: rgba(212, 175, 55, 0.22);
+    --gold: #d4af37;
+    --gold-bright: #ffe17a;
+    --ink: #f4f1e6;
+    --muted: #8a8f9c;
+    --red: #e23b3b;
+    --orange: #ef8a2b;
+    --green: #29c46a;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; overflow: hidden; }
+
+  body {
+    font-family: "Segoe UI", system-ui, -apple-system, sans-serif;
+    color: var(--ink);
+    background:
+      radial-gradient(1200px 800px at 50% -20%, #16203a 0%, transparent 60%),
+      radial-gradient(900px 600px at 100% 120%, #1a1230 0%, transparent 55%),
+      linear-gradient(180deg, var(--bg-2), var(--bg));
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    user-select: none;
+  }
+
+  body::before {
+    content: "";
+    position: fixed;
+    inset: -40%;
+    background: conic-gradient(from 0deg at 50% 0%, transparent 0deg, rgba(212,175,55,0.05) 18deg, transparent 36deg);
+    pointer-events: none;
+    animation: sweep 22s linear infinite;
+    z-index: 0;
+  }
+  @keyframes sweep { to { transform: rotate(360deg); } }
+
+  header {
+    position: relative;
+    z-index: 2;
+    text-align: center;
+    padding: 20px 34px 18px;
+    border-bottom: 1px solid var(--panel-border);
+    background: linear-gradient(180deg, rgba(0,0,0,0.4), transparent);
+  }
+  header h1 {
+    margin: 0;
+    font-size: clamp(28px, 4.4vw, 52px);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    font-weight: 800;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #8a6d1f);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    text-shadow: 0 2px 30px rgba(212,175,55,0.25);
+  }
+  /* Anniversary line — bigger, gold and glowing */
+  header .sub {
+    display: block;
+    margin-top: 12px;
+    color: var(--gold-bright);
+    font-size: clamp(15px, 2.1vw, 26px);
+    letter-spacing: 0.34em;
+    text-transform: uppercase;
+    font-weight: 700;
+    text-shadow: 0 0 22px rgba(212,175,55,0.55), 0 1px 0 rgba(0,0,0,0.4);
+  }
+
+  select, button, input {
+    font-family: inherit;
+    color: var(--ink);
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 10px;
+    padding: 13px 15px;
+    font-size: 15px;
+    outline: none;
+    transition: border-color .2s, box-shadow .2s, background .2s, transform .08s;
+  }
+  select { cursor: pointer; width: 100%; }
+  select:focus, input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
+  button { cursor: pointer; letter-spacing: 0.06em; }
+  button:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); }
+  button:active { transform: translateY(1px); }
+  button:disabled { opacity: 0.45; cursor: default; }
+  button.primary {
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold));
+    color: #2a2207;
+    border: none;
+    font-weight: 700;
+  }
+  button.primary:hover { filter: brightness(1.06); }
+  button.ghost { color: var(--muted); }
+
+  /* ================= WHEEL (opening) ================= */
+  #wheelView {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: none;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 22px;
+    padding: 24px;
+    min-height: 0;
+    overflow-y: auto;
+  }
+  .wheelHint { color: var(--muted); letter-spacing: 0.24em; text-transform: uppercase; font-size: 13px; }
+  .wheelWrap {
+    position: relative;
+    width: min(52vh, 470px);
+    aspect-ratio: 1;
+    max-width: 88vw;
+  }
+  #wheel { width: 100%; height: 100%; display: block; filter: drop-shadow(0 20px 50px rgba(0,0,0,0.55)); }
+  .pointer {
+    position: absolute;
+    top: -6px; left: 50%;
+    transform: translateX(-50%);
+    width: 0; height: 0;
+    border-left: 17px solid transparent;
+    border-right: 17px solid transparent;
+    border-top: 30px solid var(--gold-bright);
+    filter: drop-shadow(0 3px 4px rgba(0,0,0,0.6));
+    z-index: 3;
+  }
+  .hub {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    width: 24%; height: 24%;
+    border-radius: 50%;
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, #9c7a1e);
+    color: #2a2207;
+    border: 3px solid #050608;
+    font-weight: 800;
+    font-size: clamp(14px, 2vw, 20px);
+    letter-spacing: 0.14em;
+    z-index: 2;
+    box-shadow: 0 0 24px rgba(212,175,55,0.5);
+  }
+  .hub:hover { filter: brightness(1.07); background: linear-gradient(180deg, var(--gold-bright), var(--gold) 60%, #9c7a1e); border-color: #050608; }
+  /* keep the hub centred on press (don't let the global button:active clobber the centring transform) */
+  .hub:active { transform: translate(-50%, calc(-50% + 1px)); }
+  .wheelControls { display: flex; gap: 12px; }
+
+  /* stage area holds wheel + result card so they can cross-glide */
+  #stageArea {
+    position: relative;
+    width: 100%;
+    max-width: 920px;
+    height: min(64vh, 580px);
+  }
+  .slide {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    transition: transform .6s cubic-bezier(.22,.9,.3,1), opacity .5s ease;
+  }
+  .slide.in { transform: translateX(0); opacity: 1; }
+  .slide.out-left { transform: translateX(-135%); opacity: 0; }
+  .slide.out-right { transform: translateX(135%); opacity: 0; }
+  .slide:not(.in) { pointer-events: none; }
+
+  .resultCard, .completeCard {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 16px;
+    padding: 30px 34px;
+    max-width: 760px;
+    width: 100%;
+    text-align: center;
+  }
+  .resultCard .qcat { color: var(--gold); letter-spacing: 0.28em; text-transform: uppercase; font-size: 15px; margin-bottom: 14px; }
+  .resultCard .qtext { font-size: clamp(26px, 3.6vw, 48px); font-weight: 700; margin: 0 0 26px; line-height: 1.22; }
+  .resultBtns { display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
+  .resultBtns button { padding: 14px 26px; font-size: 16px; }
+  .completeCard h2 { margin: 0 0 10px; color: var(--gold-bright); letter-spacing: 0.1em; }
+  .completeCard p { color: var(--muted); margin: 0 0 20px; }
+
+  /* ================= MAIN PAGE ================= */
+  main {
+    position: relative;
+    z-index: 1;
+    flex: 1;
+    display: none;
+    grid-template-columns: 350px 1fr 350px;
+    gap: 26px;
+    padding: 28px 34px 34px;
+    min-height: 0;
+  }
+  .panel {
+    background: var(--panel);
+    border: 1px solid var(--panel-border);
+    border-radius: 18px;
+    padding: 22px;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.35) inset, 0 1px 0 rgba(255,255,255,0.04);
+  }
+  .plabel { color: var(--gold); letter-spacing: 0.22em; text-transform: uppercase; font-size: 12px; margin-bottom: 12px; }
+
+  .qcat { color: var(--muted); letter-spacing: 0.24em; text-transform: uppercase; font-size: 11px; margin: 18px 0 8px; }
+  .qtext { font-size: clamp(19px, 1.8vw, 26px); line-height: 1.3; font-weight: 600; margin: 0; flex: 1; }
+  .qsurvey { color: var(--muted); font-size: 12px; margin: 14px 0 18px; font-style: italic; }
+  .answerRow { display: flex; flex-direction: column; gap: 10px; }
+  #answerInput { font-size: 18px; padding: 15px 18px; text-transform: uppercase; letter-spacing: 0.02em; }
+  #answerInput::placeholder { text-transform: none; letter-spacing: normal; }
+  #answerInput:disabled { opacity: 0.5; }
+  #nextBtn { margin-top: 10px; width: 100%; }
+
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 0;
+  }
+  .bigScore {
+    font-size: clamp(64px, 10vw, 128px);
+    font-weight: 800;
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+    margin-bottom: 18px;
+    background: linear-gradient(180deg, #fff, #cfd3dc 60%, #8a8f9c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    transition: filter .2s;
+  }
+  .chart { display: flex; gap: 16px; align-items: stretch; height: min(56vh, 520px); }
+  .barTrack {
+    position: relative;
+    width: clamp(90px, 10vw, 150px);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    overflow: hidden;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
+  }
+  .barFill {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 100%;
+    background: var(--red);
+    border-radius: 16px 16px 0 0;
+    transition: background-color .25s linear;
+  }
+  .barFill::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(90deg, rgba(255,255,255,0.22), transparent 40%);
+    pointer-events: none;
+  }
+  .scale { display: flex; flex-direction: column; justify-content: space-between; color: var(--muted); font-size: 11px; letter-spacing: 0.12em; text-align: left; padding: 2px 0; }
+  .scale .zero { color: var(--gold); font-weight: 700; }
+  .verdict { margin-top: 22px; min-height: 26px; font-size: 15px; text-align: center; max-width: 420px; }
+  .verdict .good { color: var(--green); }
+  .verdict .meh { color: var(--orange); }
+  .verdict .bad { color: var(--red); }
+  .verdict .accepted { color: var(--gold-bright); font-weight: 700; }
+  .statusLine { color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; margin-bottom: 6px; height: 16px; }
+
+  .log { flex: 1; overflow-y: auto; min-height: 0; margin: 4px -6px 16px; padding: 0 6px; }
+  .log::-webkit-scrollbar { width: 8px; }
+  .log::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.25); border-radius: 8px; }
+  .entry {
+    display: flex; align-items: center; justify-content: space-between; gap: 10px;
+    padding: 12px 13px; border-radius: 10px; margin-bottom: 8px;
+    background: rgba(255,255,255,0.025); border: 1px solid rgba(255,255,255,0.05);
+    animation: slidein .3s ease;
+  }
+  @keyframes slidein { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .entry .ans { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry .ans small { display: block; color: var(--muted); font-size: 11px; }
+  .entry .pts { font-weight: 800; font-size: 20px; font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+  .entry.zero { border-color: var(--gold); background: rgba(212,175,55,0.08); }
+  .entry.zero .pts { color: var(--gold-bright); }
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 30px 10px; }
+  #resetBtn { width: 100%; }
+
+  /* ================= OVERLAYS ================= */
+  .overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    backdrop-filter: blur(3px);
+  }
+  .overlay.show { display: flex; animation: fadein .3s ease; }
+  @keyframes fadein { from { opacity: 0; } to { opacity: 1; } }
+  .overlay h2 {
+    font-size: clamp(48px, 12vw, 160px);
+    letter-spacing: 0.12em;
+    margin: 0;
+    font-weight: 900;
+    text-transform: uppercase;
+    animation: pop .6s cubic-bezier(.2,1.5,.4,1) both;
+    text-align: center;
+    line-height: 0.95;
+  }
+  @keyframes pop { from { transform: scale(0.4); opacity: 0; } to { transform: scale(1); opacity: 1; } }
+  .overlay p { letter-spacing: 0.3em; text-transform: uppercase; margin-top: 10px; font-size: clamp(20px, 4vw, 44px); font-weight: 800; }
+  .overlay small { color: var(--muted); margin-top: 24px; letter-spacing: 0.2em; }
+
+  #pointlessOverlay { background: radial-gradient(circle at 50% 50%, rgba(212,175,55,0.16), rgba(0,0,0,0.86) 60%); }
+  #pointlessOverlay h2 {
+    background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #7a5f17);
+    -webkit-background-clip: text; background-clip: text; color: transparent;
+    text-shadow: 0 0 60px rgba(212,175,55,0.5);
+  }
+  #pointlessOverlay p { color: var(--gold-bright); }
+
+  #failOverlay { background: radial-gradient(circle at 50% 50%, rgba(226,59,59,0.22), rgba(0,0,0,0.9) 62%); }
+  #failOverlay h2 {
+    color: #ff5a5a;
+    text-shadow: 0 0 50px rgba(226,59,59,0.6);
+  }
+  #failOverlay p { color: #ff9a9a; }
+
+  .loading, .errbox { margin: auto; text-align: center; color: var(--muted); z-index: 2; }
+  .errbox { color: var(--red); max-width: 540px; line-height: 1.5; }
+  .errbox code { color: var(--gold); }
+
+  @media (max-width: 960px) {
+    main { grid-template-columns: 1fr; grid-auto-rows: min-content; overflow-y: auto; }
+    .chart { height: 40vh; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Pointless</h1>
+  <span class="sub">Vegter 25th Anniversary Edition</span>
+</header>
+
+<!-- ===== OPENING: category wheel ===== -->
+<div id="wheelView">
+  <div id="stageArea">
+    <div class="slide in" id="wheelSlide">
+      <div class="wheelHint">Spin to choose a category</div>
+      <div class="wheelWrap">
+        <div class="pointer"></div>
+        <svg id="wheel" viewBox="0 0 300 300" aria-label="Category wheel"></svg>
+        <button id="spinBtn" class="hub">SPIN</button>
+      </div>
+    </div>
+    <div class="slide out-right" id="resultSlide">
+      <div class="resultCard" id="resultCard">
+        <div class="qcat" id="rCat"></div>
+        <p class="qtext" id="rText"></p>
+        <div class="resultBtns">
+          <button id="playBtn" class="primary">Play question ▸</button>
+          <button id="respinBtn" class="ghost">↻ Respin</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="completeCard" id="completeCard" style="display:none">
+    <h2>Session complete!</h2>
+    <p>You've played all the categories.</p>
+    <button id="restartCompleteBtn" class="primary">Restart session</button>
+  </div>
+
+  <div class="wheelControls">
+    <button id="restartBtn" class="ghost">⟲ Restart session</button>
+  </div>
+</div>
+
+<!-- ===== MAIN PAGE ===== -->
+<main id="app">
+  <section class="panel">
+    <div class="plabel">The question</div>
+    <div class="qcat" id="qCat"></div>
+    <p class="qtext" id="qText"></p>
+    <div class="qsurvey" id="qSurvey"></div>
+    <div class="answerRow">
+      <input id="answerInput" type="text" placeholder="Type your answer…" autocomplete="off" />
+      <button id="submitBtn" class="primary">Lock it in</button>
+    </div>
+    <button id="nextBtn" class="ghost">Next category ▸</button>
+  </section>
+
+  <section class="stage">
+    <div class="statusLine" id="statusLine">Awaiting your answer</div>
+    <div class="bigScore" id="bigScore">100</div>
+    <div class="chart">
+      <div class="barTrack"><div class="barFill" id="barFill"></div></div>
+      <div class="scale">
+        <span>100</span><span>50</span><span class="zero">0 · POINTLESS</span>
+      </div>
+    </div>
+    <div class="verdict" id="verdict"></div>
+  </section>
+
+  <section class="panel">
+    <div class="plabel">This round</div>
+    <div class="log" id="log">
+      <div class="empty">No answers yet.<br />The hunt for a pointless answer begins…</div>
+    </div>
+    <button id="resetBtn">⟲ Reset round</button>
+  </section>
+</main>
+
+<div class="loading" id="loading">Loading question database…</div>
+
+<div class="overlay" id="pointlessOverlay">
+  <h2>Pointless!</h2>
+  <p>A perfect answer</p>
+  <small id="pointlessSub">Nobody said it. Click anywhere to continue.</small>
+</div>
+
+<div class="overlay" id="failOverlay">
+  <h2>Not on the board</h2>
+  <p>You suck!</p>
+  <small>Click anywhere to try again.</small>
+</div>
+
+<script>
+"use strict";
+
+const state = {
+  db: null,
+  currentQ: null,
+  currentIndex: null,   // index in db.questions of the question being played
+  selectedIndex: null,  // index the wheel landed on
+  remaining: [],        // question indices still to play (random order)
+  answered: new Set(),
+  round: [],
+  busy: false,          // blocks input during suspense/animation
+  wheelRot: 0,
+  spinning: false,
+};
+
+const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
+
+/* ---------- Fuzzy matching ---------- */
+function normalize(str) {
+  return str
+    .toLowerCase()
+    .normalize("NFD").replace(/[̀-ͯ]/g, "")
+    .replace(/[^a-z0-9 ]/g, " ")
+    .replace(/\b(the|a|an|of|and|st|saint)\b/g, " ")
+    .replace(/\s+/g, " ")
+    .trim();
+}
+function levenshtein(a, b) {
+  if (a === b) return 0;
+  if (!a.length) return b.length;
+  if (!b.length) return a.length;
+  let prev = Array.from({ length: b.length + 1 }, (_, i) => i);
+  for (let i = 1; i <= a.length; i++) {
+    let cur = [i];
+    for (let j = 1; j <= b.length; j++) {
+      const cost = a[i - 1] === b[j - 1] ? 0 : 1;
+      cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + cost);
+    }
+    prev = cur;
+  }
+  return prev[b.length];
+}
+function fuzzyMatch(input, question) {
+  const q = normalize(input);
+  if (!q) return null;
+  let best = null, bestDist = Infinity;
+  for (const ans of question.answers) {
+    const candidates = [ans.answer, ...(ans.aliases || [])];
+    for (const cand of candidates) {
+      const c = normalize(cand);
+      if (!c) continue;
+      let dist;
+      if (c === q) dist = 0;
+      else if (q.length >= 3 && (c.includes(q) || q.includes(c))) dist = 1;
+      else dist = levenshtein(q, c);
+      const tolerance = Math.max(1, Math.floor(c.length * 0.34));
+      if (dist <= tolerance && dist < bestDist) { bestDist = dist; best = ans; }
+    }
+  }
+  return best;
+}
+
+/* ---------- Countdown animation ---------- */
+const RED = [226, 59, 59], ORANGE = [239, 138, 43], GREEN = [41, 196, 106], GOLD = [255, 225, 122];
+function lerp(a, b, t) { return a + (b - a) * t; }
+function mix(c1, c2, t) {
+  return `rgb(${Math.round(lerp(c1[0], c2[0], t))},${Math.round(lerp(c1[1], c2[1], t))},${Math.round(lerp(c1[2], c2[2], t))})`;
+}
+function colorFor(value) {
+  if (value <= 0.0001) return `rgb(${GOLD.join(",")})`;
+  const v = Math.max(0, Math.min(100, value));
+  if (v > 50) return mix(ORANGE, RED, (v - 50) / 50);
+  return mix(GREEN, ORANGE, v / 50);
+}
+function setBoard(value) {
+  const v = Math.max(0, value);
+  document.getElementById("bigScore").textContent = Math.round(v);
+  const fill = document.getElementById("barFill");
+  fill.style.height = v + "%";
+  fill.style.backgroundColor = colorFor(v);
+}
+// The bar follows ONE fixed descent curve anchored at zero: fast at the top,
+// decelerating more and more as it approaches 0 (like the real Pointless bar).
+// It simply stops when it reaches the answer's score. Because every answer rides
+// the identical curve, the speed at any given number is the same no matter the
+// final score — you can't gauge where it'll land. Slow, because it's all suspense.
+//   value(s) = 100 * (1 - s)^DECEL, where s = elapsed / FALL_MS (s in [0,1] is 100 -> 0)
+const FALL_MS = 14000; // time to crawl all the way to 0 (higher = slower, gentler start)
+const DECEL = 2;       // higher = more pronounced slow-down near the bottom
+function animateCountdown(target) {
+  return new Promise((resolve) => {
+    const sStop = 1 - Math.pow(Math.max(0, target) / 100, 1 / DECEL); // where the curve hits target
+    let startTs = null;
+    function frame(ts) {
+      if (startTs === null) startTs = ts;
+      const s = (ts - startTs) / FALL_MS; // absolute progress along the shared curve
+      if (s >= sStop) { setBoard(target); resolve(); return; }
+      setBoard(100 * Math.pow(1 - s, DECEL));
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  });
+}
+
+/* ---------- Wheel ---------- */
+const SVGNS = "http://www.w3.org/2000/svg";
+const SEG_FILLS = ["#1b1e28", "#2b2613"];
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+function pointOnCircle(angleDeg, r) {
+  const rad = angleDeg * Math.PI / 180;      // clockwise from top
+  return [150 + r * Math.sin(rad), 150 - r * Math.cos(rad)];
+}
+// SVG arc path between two angles (clockwise from top) at radius r
+function arcPath(a1, a2, r) {
+  const [x1, y1] = pointOnCircle(a1, r);
+  const [x2, y2] = pointOnCircle(a2, r);
+  const delta = a2 - a1;
+  const large = Math.abs(delta) > 180 ? 1 : 0;
+  const sweep = delta >= 0 ? 1 : 0;
+  return `M${x1.toFixed(2)},${y1.toFixed(2)} A${r.toFixed(2)},${r.toFixed(2)} 0 ${large} ${sweep} ${x2.toFixed(2)},${y2.toFixed(2)}`;
+}
+function drawWheel(indices) {
+  const svg = document.getElementById("wheel");
+  svg.innerHTML = "";
+  const defs = document.createElementNS(SVGNS, "defs");
+  svg.appendChild(defs);
+  const n = indices.length;
+  const seg = 360 / n;
+  const R = 142;
+
+  // wedges
+  for (let i = 0; i < n; i++) {
+    const start = i * seg, end = (i + 1) * seg;
+    const [x1, y1] = pointOnCircle(start, R);
+    const [x2, y2] = pointOnCircle(end, R);
+    const large = seg > 180 ? 1 : 0;
+    const path = document.createElementNS(SVGNS, "path");
+    path.setAttribute("d", `M150,150 L${x1.toFixed(2)},${y1.toFixed(2)} A${R},${R} 0 ${large} 1 ${x2.toFixed(2)},${y2.toFixed(2)} Z`);
+    path.setAttribute("fill", SEG_FILLS[i % SEG_FILLS.length]);
+    path.setAttribute("stroke", "rgba(212,175,55,0.55)");
+    path.setAttribute("stroke-width", "1.5");
+    svg.appendChild(path);
+  }
+
+  // curved labels that follow each wedge's arc near the rim
+  const labelR = R * 0.82;
+  for (let i = 0; i < n; i++) {
+    const start = i * seg, end = (i + 1) * seg;
+    const mid = start + seg / 2;
+    const bottomHalf = mid > 90 && mid < 270; // flip so text stays upright
+    const pad = Math.min(seg * 0.14, 10);
+    const d = bottomHalf
+      ? arcPath(end - pad, start + pad, labelR)   // reversed -> upright on the bottom
+      : arcPath(start + pad, end - pad, labelR);
+
+    const arcId = "lbl" + i;
+    const arc = document.createElementNS(SVGNS, "path");
+    arc.setAttribute("id", arcId);
+    arc.setAttribute("d", d);
+    arc.setAttribute("fill", "none");
+    defs.appendChild(arc);
+
+    const cat = state.db.questions[indices[i]].category;
+    // shrink long labels so they never overflow (get clipped by) their arc
+    const base = n > 4 ? 13 : 15.5;
+    const availLen = ((seg - 2 * pad) * Math.PI / 180) * labelR;
+    const fontSize = Math.max(9, Math.min(base, availLen / (cat.length * 0.64)));
+
+    const text = document.createElementNS(SVGNS, "text");
+    text.setAttribute("fill", "#ffe17a");
+    text.setAttribute("font-size", fontSize.toFixed(1));
+    text.setAttribute("font-weight", "700");
+    text.setAttribute("letter-spacing", "0.4");
+    text.setAttribute("text-anchor", "middle");
+    text.setAttribute("dominant-baseline", "middle");
+    const tp = document.createElementNS(SVGNS, "textPath");
+    tp.setAttribute("href", "#" + arcId);
+    tp.setAttributeNS("http://www.w3.org/1999/xlink", "xlink:href", "#" + arcId);
+    tp.setAttribute("startOffset", "50%");
+    tp.textContent = cat;
+    text.appendChild(tp);
+    svg.appendChild(text);
+  }
+
+  const rim = document.createElementNS(SVGNS, "circle");
+  rim.setAttribute("cx", "150"); rim.setAttribute("cy", "150"); rim.setAttribute("r", String(R));
+  rim.setAttribute("fill", "none"); rim.setAttribute("stroke", "var(--gold)"); rim.setAttribute("stroke-width", "3");
+  svg.appendChild(rim);
+}
+
+// glide the wheel back in / result card off to the right
+function resetSlides() {
+  const ws = document.getElementById("wheelSlide");
+  const rs = document.getElementById("resultSlide");
+  ws.className = "slide in";
+  rs.className = "slide out-right";
+}
+
+function showWheel() {
+  document.getElementById("app").style.display = "none";
+  document.getElementById("wheelView").style.display = "flex";
+
+  const stage = document.getElementById("stageArea");
+  const complete = document.getElementById("completeCard");
+  if (state.remaining.length === 0) {
+    stage.style.display = "none";
+    complete.style.display = "block";
+    return;
+  }
+  stage.style.display = "block";
+  complete.style.display = "none";
+
+  resetSlides();
+  drawWheel(state.remaining);
+  const wheel = document.getElementById("wheel");
+  wheel.style.transition = "none";
+  wheel.style.transform = "rotate(0deg)";
+  void wheel.getBoundingClientRect();
+  state.wheelRot = 0;
+  document.getElementById("spinBtn").disabled = false;
+}
+
+function spin() {
+  if (state.spinning || state.remaining.length === 0) return;
+  state.spinning = true;
+  document.getElementById("spinBtn").disabled = true;
+  // make sure the wheel is showing and the result card is tucked away
+  document.getElementById("wheelSlide").className = "slide in";
+  document.getElementById("resultSlide").className = "slide out-right";
+
+  const n = state.remaining.length;
+  const seg = 360 / n;
+  const pos = Math.floor(Math.random() * n);
+  const jitter = (Math.random() - 0.5) * seg * 0.55;
+  const center = pos * seg + seg / 2 + jitter;
+  const desiredMod = ((360 - center) % 360 + 360) % 360;
+  const delta = 4 * 360 + (((desiredMod - (state.wheelRot % 360)) % 360) + 360) % 360;
+  const newRot = state.wheelRot + delta;
+  state.wheelRot = newRot;
+
+  const wheel = document.getElementById("wheel");
+  wheel.style.transition = "transform 4.8s cubic-bezier(.16,.85,.28,1)";
+  wheel.style.transform = `rotate(${newRot}deg)`;
+  wheel.addEventListener("transitionend", () => {
+    state.spinning = false;
+    document.getElementById("spinBtn").disabled = false;
+    revealResult(state.remaining[pos]);
+  }, { once: true });
+}
+
+function revealResult(qIndex) {
+  state.selectedIndex = qIndex;
+  const q = state.db.questions[qIndex];
+  document.getElementById("rCat").textContent = q.category || "";
+  document.getElementById("rText").textContent = q.question;
+  // wheel glides off to the left, big question card glides in from the right
+  document.getElementById("wheelSlide").className = "slide out-left";
+  document.getElementById("resultSlide").className = "slide in";
+}
+
+function respin() {
+  if (state.spinning) return;
+  // question card glides back out to the right, wheel glides back in, then spin
+  document.getElementById("resultSlide").className = "slide out-right";
+  document.getElementById("wheelSlide").className = "slide in";
+  setTimeout(spin, 640);
+}
+
+function playSelected() {
+  if (state.selectedIndex == null) return;
+  state.currentIndex = state.selectedIndex;
+  document.getElementById("wheelView").style.display = "none";
+  document.getElementById("app").style.display = "grid";
+  loadQuestion(state.db.questions[state.currentIndex]);
+}
+
+function nextCategory() {
+  // mark the just-played category as done, then back to the wheel
+  state.remaining = state.remaining.filter((i) => i !== state.currentIndex);
+  state.currentIndex = null;
+  state.selectedIndex = null;
+  showWheel();
+}
+
+function restartSession() {
+  state.remaining = shuffle(state.db.questions.map((_, i) => i));
+  state.currentIndex = null;
+  state.selectedIndex = null;
+  showWheel();
+}
+
+/* ---------- Main page rendering ---------- */
+function loadQuestion(q) {
+  state.currentQ = q;
+  state.answered = new Set();
+  state.round = [];
+  document.getElementById("qCat").textContent = q.category || "General Knowledge";
+  document.getElementById("qText").textContent = q.question;
+  document.getElementById("qSurvey").textContent = state.db.surveyNote || "";
+  document.getElementById("bigScore").style.filter = "";
+  setBoard(100);
+  renderLog();
+  const input = document.getElementById("answerInput");
+  input.value = "";
+  input.disabled = false;
+  input.focus();
+  document.getElementById("statusLine").textContent = "Awaiting your answer";
+  document.getElementById("verdict").innerHTML = "";
+}
+function renderLog() {
+  const log = document.getElementById("log");
+  if (!state.round.length) {
+    log.innerHTML = '<div class="empty">No answers yet.<br />The hunt for a pointless answer begins…</div>';
+    return;
+  }
+  log.innerHTML = "";
+  for (let i = state.round.length - 1; i >= 0; i--) {
+    const e = state.round[i];
+    const div = document.createElement("div");
+    div.className = "entry" + (e.zero ? " zero" : "");
+    div.innerHTML =
+      '<div class="ans">' + escapeHtml(e.display) +
+      (e.note ? '<small>' + escapeHtml(e.note) + '</small>' : '') +
+      '</div><div class="pts">' + e.score + '</div>';
+    log.appendChild(div);
+  }
+}
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, (c) =>
+    ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+}
+
+/* ---------- Submit flow (with suspense) ---------- */
+async function submitAnswer() {
+  if (state.busy) return;
+  const input = document.getElementById("answerInput");
+  const raw = input.value.trim();
+  const verdict = document.getElementById("verdict");
+  const status = document.getElementById("statusLine");
+  if (!raw) return;
+
+  const match = fuzzyMatch(raw, state.currentQ);
+
+  if (match && state.answered.has(match.answer)) {
+    verdict.innerHTML = '<span class="meh">“' + escapeHtml(match.answer) + '” is already on the board this round.</span>';
+    status.textContent = "Already given";
+    input.select();
+    return;
+  }
+
+  // Lock it in, then hold for suspense before revealing anything.
+  state.busy = true;
+  input.disabled = true;
+  document.getElementById("submitBtn").disabled = true;
+  verdict.innerHTML = "";
+  status.textContent = "Locking it in…";
+  await sleep(2000);
+
+  if (!match) {
+    setBoard(100);
+    status.textContent = "Not on the board";
+    showFail();
+    finishTurn();
+    return;
+  }
+
+  status.textContent = "Counting down…";
+  verdict.innerHTML = '<span class="accepted">✓ ' + escapeHtml(match.answer) + '</span>' +
+    (match.note ? ' <span style="color:var(--muted)">— ' + escapeHtml(match.note) + '</span>' : '');
+
+  await animateCountdown(match.score);
+
+  const fill = document.getElementById("barFill");
+  if (match.score === 0) {
+    fill.style.backgroundColor = `rgb(${GOLD.join(",")})`;
+    document.getElementById("bigScore").style.filter = "drop-shadow(0 0 20px rgba(212,175,55,.7))";
+    showPointless(match);
+  } else {
+    document.getElementById("bigScore").style.filter = "";
+  }
+
+  state.answered.add(match.answer);
+  state.round.push({ display: match.answer, note: match.note || "", score: match.score, zero: match.score === 0 });
+  renderLog();
+
+  if (match.score === 0) status.textContent = "POINTLESS!";
+  else if (match.score <= 15) { status.textContent = "Great answer"; verdict.innerHTML += ' <span class="good">— a really low score!</span>'; }
+  else if (match.score <= 45) { status.textContent = "Solid"; verdict.innerHTML += ' <span class="meh">— middling.</span>'; }
+  else { status.textContent = "Ouch"; verdict.innerHTML += ' <span class="bad">— a high, popular answer.</span>'; }
+
+  finishTurn();
+}
+
+function finishTurn() {
+  state.busy = false;
+  const input = document.getElementById("answerInput");
+  input.disabled = false;
+  document.getElementById("submitBtn").disabled = false;
+  input.value = "";
+  input.focus();
+}
+
+function showPointless(match) {
+  document.getElementById("pointlessSub").textContent =
+    (match.note ? match.note + " — n" : "N") + "obody said it. Click anywhere to continue.";
+  document.getElementById("pointlessOverlay").classList.add("show");
+}
+function showFail() {
+  document.getElementById("failOverlay").classList.add("show");
+}
+
+/* ---------- Wiring ---------- */
+function wireEvents() {
+  document.getElementById("spinBtn").addEventListener("click", spin);
+  document.getElementById("playBtn").addEventListener("click", playSelected);
+  document.getElementById("respinBtn").addEventListener("click", respin);
+  document.getElementById("restartBtn").addEventListener("click", restartSession);
+  document.getElementById("restartCompleteBtn").addEventListener("click", restartSession);
+  document.getElementById("nextBtn").addEventListener("click", nextCategory);
+
+  document.getElementById("submitBtn").addEventListener("click", submitAnswer);
+  document.getElementById("answerInput").addEventListener("keydown", (e) => {
+    if (e.key === "Enter") { e.preventDefault(); submitAnswer(); }
+  });
+  document.getElementById("resetBtn").addEventListener("click", () => {
+    if (state.currentQ) loadQuestion(state.currentQ);
+  });
+
+  document.querySelectorAll(".overlay").forEach((ov) => {
+    ov.addEventListener("click", () => ov.classList.remove("show"));
+  });
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") document.querySelectorAll(".overlay.show").forEach((o) => o.classList.remove("show"));
+  });
+}
+
+/* ---------- Boot ---------- */
+async function boot() {
+  try {
+    const res = await fetch("database.json", { cache: "no-store" });
+    if (!res.ok) throw new Error("HTTP " + res.status);
+    const db = await res.json();
+    if (!db.questions || !db.questions.length) throw new Error("No questions in database.");
+    state.db = db;
+    document.getElementById("loading").style.display = "none";
+    wireEvents();
+    restartSession(); // opens the full wheel
+  } catch (err) {
+    const loading = document.getElementById("loading");
+    loading.className = "errbox";
+    loading.innerHTML =
+      "<strong>Couldn't load <code>database.json</code></strong><br/><br/>" +
+      escapeHtml(err.message) +
+      "<br/><br/>This app loads its questions from a separate file, so it must be served over HTTP " +
+      "(opening the file directly with <code>file://</code> blocks the fetch). Try:<br/><br/>" +
+      "<code>python3 -m http.server</code><br/>then open <code>http://localhost:8000</code>.";
+  }
+}
+
+boot();
+</script>
+</body>
+</html>
