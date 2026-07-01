@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>Pointless</title>
+<title>Pointless — Vegter 25th Anniversary Edition</title>
 <style>
   :root {
     --bg: #050608;
@@ -55,23 +55,15 @@
   header {
     position: relative;
     z-index: 2;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 18px 34px;
+    text-align: center;
+    padding: 20px 34px 16px;
     border-bottom: 1px solid var(--panel-border);
     background: linear-gradient(180deg, rgba(0,0,0,0.4), transparent);
   }
-
-  .brand {
-    display: flex;
-    align-items: baseline;
-    gap: 14px;
-  }
-  .brand h1 {
+  header h1 {
     margin: 0;
-    font-size: clamp(26px, 4vw, 46px);
-    letter-spacing: 0.32em;
+    font-size: clamp(28px, 4.4vw, 52px);
+    letter-spacing: 0.34em;
     text-transform: uppercase;
     font-weight: 800;
     background: linear-gradient(180deg, var(--gold-bright), var(--gold) 55%, #8a6d1f);
@@ -80,14 +72,14 @@
     color: transparent;
     text-shadow: 0 2px 30px rgba(212,175,55,0.25);
   }
-  .brand .tag {
+  header .sub {
+    display: block;
+    margin-top: 8px;
     color: var(--muted);
-    font-size: 12px;
-    letter-spacing: 0.28em;
+    font-size: clamp(11px, 1.4vw, 15px);
+    letter-spacing: 0.32em;
     text-transform: uppercase;
   }
-
-  .controls { display: flex; align-items: center; gap: 12px; }
 
   select, button, input {
     font-family: inherit;
@@ -95,18 +87,15 @@
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 10px;
-    padding: 11px 14px;
+    padding: 13px 15px;
     font-size: 15px;
     outline: none;
     transition: border-color .2s, box-shadow .2s, background .2s, transform .08s;
   }
-  select { min-width: 230px; cursor: pointer; }
+  select { cursor: pointer; width: 100%; }
   select:focus, input:focus { border-color: var(--gold); box-shadow: 0 0 0 3px rgba(212,175,55,0.15); }
 
-  button {
-    cursor: pointer;
-    letter-spacing: 0.06em;
-  }
+  button { cursor: pointer; letter-spacing: 0.06em; }
   button:hover { border-color: var(--gold); background: rgba(212,175,55,0.1); }
   button:active { transform: translateY(1px); }
   button.primary {
@@ -116,136 +105,150 @@
     font-weight: 700;
   }
   button.primary:hover { filter: brightness(1.06); }
-  button.ghost { color: var(--muted); }
 
   main {
     position: relative;
     z-index: 1;
     flex: 1;
     display: grid;
-    grid-template-columns: 1fr 320px;
+    grid-template-columns: 350px 1fr 350px;
     gap: 26px;
-    padding: 30px 34px 34px;
+    padding: 28px 34px 34px;
     min-height: 0;
   }
 
-  .stage {
-    display: flex;
-    flex-direction: column;
-    min-height: 0;
-  }
-
-  .qcard {
+  .panel {
     background: var(--panel);
     border: 1px solid var(--panel-border);
     border-radius: 18px;
-    padding: 26px 30px;
-    box-shadow: 0 30px 80px rgba(0,0,0,0.45) inset, 0 1px 0 rgba(255,255,255,0.04);
-  }
-  .qcat {
-    color: var(--gold);
-    letter-spacing: 0.26em;
-    text-transform: uppercase;
-    font-size: 12px;
-    margin-bottom: 10px;
-  }
-  .qtext {
-    font-size: clamp(20px, 2.6vw, 30px);
-    line-height: 1.28;
-    font-weight: 600;
-    margin: 0;
-  }
-  .qsurvey { color: var(--muted); font-size: 13px; margin-top: 12px; font-style: italic; }
-
-  .answerRow {
-    display: flex;
-    gap: 12px;
-    margin-top: 22px;
-  }
-  .answerRow input { flex: 1; font-size: 18px; padding: 15px 18px; text-transform: uppercase; letter-spacing: 0.02em; }
-  .answerRow input::placeholder { text-transform: none; letter-spacing: normal; }
-  .answerRow input:disabled { opacity: 0.5; }
-
-  /* The big board */
-  .board {
-    margin-top: 26px;
-    flex: 1;
+    padding: 22px;
     display: flex;
     flex-direction: column;
-    justify-content: flex-end;
+    min-height: 0;
+    box-shadow: 0 30px 80px rgba(0,0,0,0.35) inset, 0 1px 0 rgba(255,255,255,0.04);
+  }
+
+  .plabel {
+    color: var(--gold);
+    letter-spacing: 0.22em;
+    text-transform: uppercase;
+    font-size: 12px;
+    margin-bottom: 12px;
+  }
+
+  /* ---- LEFT: question + answer ---- */
+  .qcat { color: var(--muted); letter-spacing: 0.24em; text-transform: uppercase; font-size: 11px; margin: 18px 0 8px; }
+  .qtext {
+    font-size: clamp(19px, 1.8vw, 26px);
+    line-height: 1.3;
+    font-weight: 600;
+    margin: 0;
+    flex: 1;
+  }
+  .qsurvey { color: var(--muted); font-size: 12px; margin: 14px 0 18px; font-style: italic; }
+  .answerRow { display: flex; flex-direction: column; gap: 10px; }
+  #answerInput { font-size: 18px; padding: 15px 18px; text-transform: uppercase; letter-spacing: 0.02em; }
+  #answerInput::placeholder { text-transform: none; letter-spacing: normal; }
+  #answerInput:disabled { opacity: 0.5; }
+
+  /* ---- CENTER: vertical bar chart ---- */
+  .stage {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
     min-height: 0;
   }
-
-  .scoreWrap {
-    position: relative;
-    border: 1px solid var(--panel-border);
-    border-radius: 16px;
-    background: linear-gradient(180deg, rgba(0,0,0,0.5), rgba(0,0,0,0.2));
-    padding: 22px 26px;
-    overflow: hidden;
-  }
-
-  .scoreHead {
-    display: flex;
-    align-items: baseline;
-    justify-content: space-between;
-    margin-bottom: 14px;
-  }
-  .scoreHead .label { color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; }
   .bigScore {
-    font-size: clamp(56px, 12vw, 130px);
+    font-size: clamp(64px, 10vw, 128px);
     font-weight: 800;
     line-height: 0.9;
     font-variant-numeric: tabular-nums;
+    margin-bottom: 18px;
     background: linear-gradient(180deg, #fff, #cfd3dc 60%, #8a8f9c);
     -webkit-background-clip: text;
     background-clip: text;
     color: transparent;
     transition: filter .2s;
   }
-
+  .chart {
+    display: flex;
+    gap: 16px;
+    align-items: stretch;
+    height: min(56vh, 520px);
+  }
   .barTrack {
-    height: 34px;
-    border-radius: 999px;
-    background: rgba(255,255,255,0.06);
-    border: 1px solid rgba(255,255,255,0.08);
-    overflow: hidden;
     position: relative;
+    width: clamp(90px, 10vw, 150px);
+    border-radius: 18px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.09);
+    overflow: hidden;
+    box-shadow: inset 0 0 40px rgba(0,0,0,0.5);
   }
   .barFill {
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
     height: 100%;
-    width: 100%;
-    border-radius: 999px;
     background: var(--red);
-    box-shadow: 0 0 24px rgba(0,0,0,0.4);
+    border-radius: 16px 16px 0 0;
     transition: background-color .25s linear;
   }
   .barFill::after {
     content: "";
     position: absolute;
     inset: 0;
-    background: linear-gradient(180deg, rgba(255,255,255,0.25), transparent 45%);
+    background: linear-gradient(90deg, rgba(255,255,255,0.22), transparent 40%);
     pointer-events: none;
   }
-  .barScale {
+  .scale {
     display: flex;
+    flex-direction: column;
     justify-content: space-between;
     color: var(--muted);
     font-size: 11px;
-    margin-top: 8px;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.12em;
+    text-align: left;
+    padding: 2px 0;
   }
-
+  .scale .zero { color: var(--gold); font-weight: 700; }
   .verdict {
-    margin-top: 14px;
+    margin-top: 22px;
     min-height: 26px;
     font-size: 15px;
-    color: var(--ink);
+    text-align: center;
+    max-width: 420px;
   }
   .verdict .good { color: var(--green); }
   .verdict .meh { color: var(--orange); }
   .verdict .bad { color: var(--red); }
   .verdict .accepted { color: var(--gold-bright); font-weight: 700; }
+  .statusLine { color: var(--muted); letter-spacing: 0.2em; text-transform: uppercase; font-size: 12px; margin-bottom: 6px; height: 16px; }
+
+  /* ---- RIGHT: round guesses ---- */
+  .log { flex: 1; overflow-y: auto; min-height: 0; margin: 4px -6px 16px; padding: 0 6px; }
+  .log::-webkit-scrollbar { width: 8px; }
+  .log::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.25); border-radius: 8px; }
+  .entry {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 12px 13px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.025);
+    border: 1px solid rgba(255,255,255,0.05);
+    animation: slidein .3s ease;
+  }
+  @keyframes slidein { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
+  .entry .ans { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .entry .ans small { display: block; color: var(--muted); font-size: 11px; }
+  .entry .pts { font-weight: 800; font-size: 20px; font-variant-numeric: tabular-nums; min-width: 38px; text-align: right; }
+  .entry.zero { border-color: var(--gold); background: rgba(212,175,55,0.08); }
+  .entry.zero .pts { color: var(--gold-bright); }
+  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 30px 10px; }
+  #resetBtn { width: 100%; }
 
   /* POINTLESS overlay */
   .pointless {
@@ -278,129 +281,62 @@
   .pointless p { color: var(--gold-bright); letter-spacing: 0.3em; text-transform: uppercase; margin-top: 8px; }
   .pointless small { color: var(--muted); margin-top: 24px; letter-spacing: 0.2em; }
 
-  /* Sidebar scoreboard */
-  aside {
-    display: flex;
-    flex-direction: column;
-    background: var(--panel);
-    border: 1px solid var(--panel-border);
-    border-radius: 18px;
-    padding: 20px;
-    min-height: 0;
-  }
-  aside h3 {
-    margin: 0 0 4px;
-    color: var(--gold);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-size: 13px;
-  }
-  .roundTotal {
-    display: flex;
-    align-items: baseline;
-    gap: 10px;
-    margin: 6px 0 16px;
-    padding-bottom: 16px;
-    border-bottom: 1px solid var(--panel-border);
-  }
-  .roundTotal b { font-size: 42px; font-weight: 800; font-variant-numeric: tabular-nums; }
-  .roundTotal span { color: var(--muted); font-size: 12px; }
-
-  .log { flex: 1; overflow-y: auto; min-height: 0; }
-  .log::-webkit-scrollbar { width: 8px; }
-  .log::-webkit-scrollbar-thumb { background: rgba(212,175,55,0.25); border-radius: 8px; }
-
-  .entry {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 10px;
-    padding: 11px 12px;
-    border-radius: 10px;
-    margin-bottom: 8px;
-    background: rgba(255,255,255,0.025);
-    border: 1px solid rgba(255,255,255,0.05);
-    animation: slidein .3s ease;
-  }
-  @keyframes slidein { from { transform: translateY(8px); opacity: 0; } to { transform: none; opacity: 1; } }
-  .entry .ans { font-size: 14px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  .entry .ans small { display: block; color: var(--muted); font-size: 11px; }
-  .entry .pts {
-    font-weight: 800;
-    font-size: 20px;
-    font-variant-numeric: tabular-nums;
-    min-width: 38px;
-    text-align: right;
-  }
-  .entry.zero { border-color: var(--gold); background: rgba(212,175,55,0.08); }
-  .entry.zero .pts { color: var(--gold-bright); }
-
-  .empty { color: var(--muted); font-size: 13px; text-align: center; padding: 30px 10px; }
-
-  .loading, .errbox {
-    margin: auto;
-    text-align: center;
-    color: var(--muted);
-    z-index: 2;
-  }
+  .loading, .errbox { margin: auto; text-align: center; color: var(--muted); z-index: 2; }
   .errbox { color: var(--red); max-width: 540px; line-height: 1.5; }
   .errbox code { color: var(--gold); }
 
-  @media (max-width: 880px) {
-    main { grid-template-columns: 1fr; }
-    aside { max-height: 38vh; }
+  @media (max-width: 960px) {
+    main { grid-template-columns: 1fr; grid-auto-rows: min-content; overflow-y: auto; }
+    .chart { height: 40vh; }
   }
 </style>
 </head>
 <body>
 
 <header>
-  <div class="brand">
-    <h1>Pointless</h1>
-    <span class="tag">Studio Edition</span>
-  </div>
-  <div class="controls">
-    <select id="questionSelect" aria-label="Choose a question"></select>
-    <button id="resetBtn" class="ghost" title="Clear the scoreboard and start over">⟲ Reset round</button>
-  </div>
+  <h1>Pointless</h1>
+  <span class="sub">Vegter 25th Anniversary Edition</span>
 </header>
 
 <main id="app" style="display:none">
-  <section class="stage">
-    <div class="qcard">
-      <div class="qcat" id="qCat"></div>
-      <p class="qtext" id="qText"></p>
-      <div class="qsurvey" id="qSurvey"></div>
-      <div class="answerRow">
-        <input id="answerInput" type="text" placeholder="Type your answer and press Enter…" autocomplete="off" />
-        <button id="submitBtn" class="primary">Lock it in</button>
-      </div>
-    </div>
 
-    <div class="board">
-      <div class="scoreWrap">
-        <div class="scoreHead">
-          <span class="label">The board</span>
-          <span class="label" id="statusLine">Awaiting your answer</span>
-        </div>
-        <div class="bigScore" id="bigScore">100</div>
-        <div class="barTrack"><div class="barFill" id="barFill"></div></div>
-        <div class="barScale"><span>0 — POINTLESS</span><span>50</span><span>100</span></div>
-        <div class="verdict" id="verdict"></div>
-      </div>
+  <!-- LEFT: question + answer -->
+  <section class="panel">
+    <div class="plabel">The question</div>
+    <select id="questionSelect" aria-label="Choose a question"></select>
+    <div class="qcat" id="qCat"></div>
+    <p class="qtext" id="qText"></p>
+    <div class="qsurvey" id="qSurvey"></div>
+    <div class="answerRow">
+      <input id="answerInput" type="text" placeholder="Type your answer…" autocomplete="off" />
+      <button id="submitBtn" class="primary">Lock it in</button>
     </div>
   </section>
 
-  <aside>
-    <h3>This round</h3>
-    <div class="roundTotal">
-      <b id="roundTotal">0</b>
-      <span>total points · lower is better</span>
+  <!-- CENTER: vertical bar chart -->
+  <section class="stage">
+    <div class="statusLine" id="statusLine">Awaiting your answer</div>
+    <div class="bigScore" id="bigScore">100</div>
+    <div class="chart">
+      <div class="barTrack"><div class="barFill" id="barFill"></div></div>
+      <div class="scale">
+        <span>100</span>
+        <span>50</span>
+        <span class="zero">0 · POINTLESS</span>
+      </div>
     </div>
+    <div class="verdict" id="verdict"></div>
+  </section>
+
+  <!-- RIGHT: this round's guesses -->
+  <section class="panel">
+    <div class="plabel">This round</div>
     <div class="log" id="log">
       <div class="empty">No answers yet.<br />The hunt for a pointless answer begins…</div>
     </div>
-  </aside>
+    <button id="resetBtn">⟲ Reset round</button>
+  </section>
+
 </main>
 
 <div class="loading" id="loading">Loading question database…</div>
@@ -417,8 +353,8 @@
 const state = {
   db: null,
   currentQ: null,
-  answered: new Set(),   // accepted answer keys this round, to avoid duplicates
-  round: [],             // { display, note, score, zero }
+  answered: new Set(),
+  round: [],
   animating: false,
 };
 
@@ -468,7 +404,6 @@ function fuzzyMatch(input, question) {
       else if (q.length >= 3 && (c.includes(q) || q.includes(c))) dist = 1;
       else dist = levenshtein(q, c);
 
-      // tolerance scales with length of the target word
       const tolerance = Math.max(1, Math.floor(c.length * 0.34));
       if (dist <= tolerance && dist < bestDist) {
         bestDist = dist;
@@ -481,55 +416,42 @@ function fuzzyMatch(input, question) {
 
 /* ---------- Countdown animation ---------- */
 const RED = [226, 59, 59], ORANGE = [239, 138, 43], GREEN = [41, 196, 106], GOLD = [255, 225, 122];
-
 function lerp(a, b, t) { return a + (b - a) * t; }
 function mix(c1, c2, t) {
   return `rgb(${Math.round(lerp(c1[0], c2[0], t))},${Math.round(lerp(c1[1], c2[1], t))},${Math.round(lerp(c1[2], c2[2], t))})`;
 }
-
-// color from current value 100 -> 0: red -> orange -> green, and pure gold exactly at 0
+// color from 100 -> 0: red -> orange -> green, pure gold exactly at 0
 function colorFor(value) {
   if (value <= 0.0001) return `rgb(${GOLD.join(",")})`;
   const v = Math.max(0, Math.min(100, value));
-  if (v > 50) return mix(ORANGE, RED, (v - 50) / 50); // 100=red, 50=orange
-  return mix(GREEN, ORANGE, v / 50);                  // 50=orange, 0=green
+  if (v > 50) return mix(ORANGE, RED, (v - 50) / 50);
+  return mix(GREEN, ORANGE, v / 50);
 }
 
-function setBoard(value, target) {
+function setBoard(value) {
   const v = Math.max(0, value);
   document.getElementById("bigScore").textContent = Math.round(v);
   const fill = document.getElementById("barFill");
-  fill.style.width = v + "%";
+  fill.style.height = v + "%";
   fill.style.backgroundColor = colorFor(v);
 }
 
-// ease-out so it decelerates (slower as the number gets lower)
+// ease-out so the number decelerates as it drops toward the final score
 function easeOutCubic(t) { return 1 - Math.pow(1 - t, 3); }
 
 function animateCountdown(target) {
   return new Promise((resolve) => {
     state.animating = true;
     const start = 100;
-    // longer when the drop is bigger, so a low score feels suspenseful
-    const duration = 1600 + (start - target) * 28; // ~1.6s .. ~4.4s
+    const duration = 1600 + (start - target) * 28; // ~1.6s .. ~4.4s (bigger drops take longer)
     let startTs = null;
-
     function frame(ts) {
       if (startTs === null) startTs = ts;
-      const elapsed = ts - startTs;
-      const t = Math.min(1, elapsed / duration);
-      const eased = easeOutCubic(t);
-      const value = start - (start - target) * eased;
-      setBoard(value, target);
-
-      if (t < 1) {
-        requestAnimationFrame(frame);
-      } else {
-        setBoard(target, target);
-        // settle to gold if it's a low/zero score handled by caller
-        state.animating = false;
-        resolve();
-      }
+      const t = Math.min(1, (ts - startTs) / duration);
+      const value = start - (start - target) * easeOutCubic(t);
+      setBoard(value);
+      if (t < 1) requestAnimationFrame(frame);
+      else { setBoard(target); state.animating = false; resolve(); }
     }
     requestAnimationFrame(frame);
   });
@@ -543,7 +465,8 @@ function loadQuestion(q) {
   document.getElementById("qCat").textContent = q.category || "General Knowledge";
   document.getElementById("qText").textContent = q.question;
   document.getElementById("qSurvey").textContent = state.db.surveyNote || "";
-  resetBoardVisual();
+  document.getElementById("bigScore").style.filter = "";
+  setBoard(100);
   renderLog();
   const input = document.getElementById("answerInput");
   input.value = "";
@@ -553,23 +476,14 @@ function loadQuestion(q) {
   document.getElementById("verdict").innerHTML = "";
 }
 
-function resetBoardVisual() {
-  setBoard(100, 100);
-  document.getElementById("bigScore").textContent = "100";
-}
-
 function renderLog() {
   const log = document.getElementById("log");
-  const total = state.round.reduce((s, e) => s + e.score, 0);
-  document.getElementById("roundTotal").textContent = total;
-
   if (!state.round.length) {
     log.innerHTML = '<div class="empty">No answers yet.<br />The hunt for a pointless answer begins…</div>';
     return;
   }
   log.innerHTML = "";
-  // newest first
-  for (let i = state.round.length - 1; i >= 0; i--) {
+  for (let i = state.round.length - 1; i >= 0; i--) { // newest first
     const e = state.round[i];
     const div = document.createElement("div");
     div.className = "entry" + (e.zero ? " zero" : "");
@@ -598,15 +512,13 @@ async function submitAnswer() {
   const match = fuzzyMatch(raw, state.currentQ);
 
   if (!match) {
-    // wrong / not on the board => maximum 100 (the worst), no animation drop
-    setBoard(100, 100);
+    setBoard(100);
     verdict.innerHTML = '<span class="bad">✗ “' + escapeHtml(raw) + '” isn\'t on our board — that\'s the maximum 100.</span>';
     status.textContent = "Not on the board";
     flashScore();
     input.select();
     return;
   }
-
   if (state.answered.has(match.answer)) {
     verdict.innerHTML = '<span class="meh">“' + escapeHtml(match.answer) + '” is already on the board this round.</span>';
     status.textContent = "Already given";
@@ -614,7 +526,6 @@ async function submitAnswer() {
     return;
   }
 
-  // Accept it
   input.disabled = true;
   document.getElementById("submitBtn").disabled = true;
   status.textContent = "Counting down…";
@@ -623,7 +534,6 @@ async function submitAnswer() {
 
   await animateCountdown(match.score);
 
-  // finalize colour: gold glow if a winning low score
   const fill = document.getElementById("barFill");
   if (match.score === 0) {
     fill.style.backgroundColor = `rgb(${GOLD.join(",")})`;
@@ -633,26 +543,15 @@ async function submitAnswer() {
     document.getElementById("bigScore").style.filter = "";
   }
 
-  // record
   state.answered.add(match.answer);
   state.round.push({ display: match.answer, note: match.note || "", score: match.score, zero: match.score === 0 });
   renderLog();
 
-  // verdict text by tier
-  if (match.score === 0) {
-    status.textContent = "POINTLESS!";
-  } else if (match.score <= 15) {
-    status.textContent = "Great answer";
-    verdict.innerHTML += ' <span class="good">— a really low score!</span>';
-  } else if (match.score <= 45) {
-    status.textContent = "Solid";
-    verdict.innerHTML += ' <span class="meh">— middling.</span>';
-  } else {
-    status.textContent = "Ouch";
-    verdict.innerHTML += ' <span class="bad">— a high, popular answer.</span>';
-  }
+  if (match.score === 0) status.textContent = "POINTLESS!";
+  else if (match.score <= 15) { status.textContent = "Great answer"; verdict.innerHTML += ' <span class="good">— a really low score!</span>'; }
+  else if (match.score <= 45) { status.textContent = "Solid"; verdict.innerHTML += ' <span class="meh">— middling.</span>'; }
+  else { status.textContent = "Ouch"; verdict.innerHTML += ' <span class="bad">— a high, popular answer.</span>'; }
 
-  // ready for next
   input.disabled = false;
   document.getElementById("submitBtn").disabled = false;
   input.value = "";
@@ -662,13 +561,8 @@ async function submitAnswer() {
 function flashScore() {
   const el = document.getElementById("bigScore");
   el.style.transition = "none";
-  el.style.color = "var(--red)";
   el.style.webkitTextFillColor = "var(--red)";
-  setTimeout(() => {
-    el.style.color = "";
-    el.style.webkitTextFillColor = "";
-    el.style.transition = "";
-  }, 350);
+  setTimeout(() => { el.style.webkitTextFillColor = ""; el.style.transition = ""; }, 350);
 }
 
 function showPointless(match) {
@@ -686,17 +580,13 @@ function populateSelect() {
     const opt = document.createElement("option");
     opt.value = String(i);
     opt.textContent = (q.category ? q.category + " — " : "") +
-      (q.question.length > 60 ? q.question.slice(0, 57) + "…" : q.question);
+      (q.question.length > 52 ? q.question.slice(0, 49) + "…" : q.question);
     sel.appendChild(opt);
   });
-  sel.addEventListener("change", () => {
-    loadQuestion(state.db.questions[Number(sel.value)]);
-  });
+  sel.addEventListener("change", () => loadQuestion(state.db.questions[Number(sel.value)]));
 }
 
-function resetRound() {
-  if (state.currentQ) loadQuestion(state.currentQ);
-}
+function resetRound() { if (state.currentQ) loadQuestion(state.currentQ); }
 
 function wireEvents() {
   document.getElementById("submitBtn").addEventListener("click", submitAnswer);
@@ -706,9 +596,7 @@ function wireEvents() {
   document.getElementById("resetBtn").addEventListener("click", resetRound);
   const overlay = document.getElementById("pointlessOverlay");
   overlay.addEventListener("click", () => overlay.classList.remove("show"));
-  document.addEventListener("keydown", (e) => {
-    if (e.key === "Escape") overlay.classList.remove("show");
-  });
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") overlay.classList.remove("show"); });
 }
 
 /* ---------- Boot ---------- */
@@ -719,7 +607,6 @@ async function boot() {
     const db = await res.json();
     if (!db.questions || !db.questions.length) throw new Error("No questions in database.");
     state.db = db;
-
     document.getElementById("loading").style.display = "none";
     document.getElementById("app").style.display = "grid";
     populateSelect();
