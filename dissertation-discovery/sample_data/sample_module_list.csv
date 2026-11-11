@@ -1,0 +1,5 @@
+code,title,year,credits,status,topics,subtopics,methods
+ECON2110,Labour Economics,2,20,completed,Labour market institutions; Minimum wages; Wage inequality,trade unions; collective bargaining; gender pay gap,regression analysis
+ECON2030,Introductory Econometrics,2,20,completed,Multiple regression; Panel data,fixed effects; random effects,ordinary least squares; panel data; instrumental variables
+ECON3120,Monetary Economics,3,20,current,Monetary transmission; Inflation expectations,credit channel; forward guidance,time series; vector autoregression
+ECON2130,Behavioural Economics,2,10,not taken,Nudges and choice architecture,defaults; loss aversion,field experiments

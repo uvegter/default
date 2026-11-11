@@ -1,0 +1,1072 @@
+# Economics content pack — SEED DATA, not an authoritative classification.
+#
+# Territory = discipline → field → subfield/problem → phenomenon, with plausible
+# methods. Territories are deliberately NOT dissertation titles or questions.
+#
+# Card attributes (fixed levels, see survey_config.yaml `attributes`):
+#   approach            primary way of working
+#   secondary_approaches other plausible ways of working
+#   style               dominant research style
+#   policy_relevance    low | medium | high
+#   data_access         open | moderate | restricted   (typical, to be verified)
+#   technical_demand    low | medium | high
+#   distributional_focus low | medium | high
+#
+# `data_routes` are SUGGESTIONS TO CHECK, not verified links. `access` is the
+# typical route and may have changed: open | registration | subscription |
+# restricted | own_collection.
+
+id: economics
+label: Economics
+pack_version: "econ-0.1.0"
+phrases:
+  behaviour: "economic behaviour"
+
+fields:
+  - {id: labour, label: Labour economics, keywords: [labour economics, labor economics, labour market, labor market, employment, wages], adjacent: [public, international]}
+  - {id: public, label: Public economics, keywords: [public economics, public finance, public policy, welfare economics, economics of the public sector], adjacent: [labour, environmental, behavioural]}
+  - {id: development, label: Development economics, keywords: [development economics, economics of development, economic development, developing countries, developing economies], adjacent: [international, public, macro]}
+  - {id: macro, label: Macroeconomics and monetary economics, keywords: [macroeconomics, monetary economics, macroeconomic, monetary policy], adjacent: [international, finance_io, development]}
+  - {id: international, label: International economics, keywords: [international economics, international trade, international finance, open economy, globalisation, globalization], adjacent: [macro, development, labour]}
+  - {id: environmental, label: Environmental and energy economics, keywords: [environmental economics, energy economics, climate change, natural resource economics, sustainability], adjacent: [public, behavioural, development]}
+  - {id: behavioural, label: Behavioural and experimental economics, keywords: [behavioural economics, behavioral economics, experimental economics, economic psychology], adjacent: [public, finance_io, environmental]}
+  - {id: finance_io, label: Finance and industrial organisation, keywords: [industrial organisation, industrial organization, industrial economics, financial economics, corporate finance, business economics, economics of the firm], adjacent: [macro, behavioural]}
+
+methods:
+  - id: m_descriptive
+    label: Descriptive statistics and trends
+    group: quant_empirical
+    keywords: [descriptive statistics, summary statistics, data visualisation, data visualization, exploratory data analysis, descriptive analysis]
+  - id: m_ols
+    label: Regression analysis (OLS)
+    group: quant_empirical
+    keywords: [regression analysis, linear regression, multiple regression, ordinary least squares, regression model, hypothesis testing, cross-sectional regression, simple regression]
+    keywords_cs: [OLS]
+  - id: m_panel
+    label: Panel-data methods
+    group: quant_empirical
+    keywords: [panel data, panel regression, fixed effects, random effects, longitudinal data]
+  - id: m_causal
+    label: Causal inference and quasi-experimental methods
+    group: quant_empirical
+    keywords: [instrumental variable, difference-in-differences, difference in differences, regression discontinuity, causal inference, quasi-experiment, quasi-experimental, natural experiment, treatment effect, endogeneity, programme evaluation, program evaluation, policy evaluation methods]
+    keywords_cs: [DiD, RDD]
+  - id: m_timeseries
+    label: Time-series methods
+    group: quant_empirical
+    keywords: [time series, time-series, vector autoregression, cointegration, unit root, stationarity, forecasting, event study, autoregressive]
+    keywords_cs: [VAR, ARIMA, GARCH, VECM]
+  - id: m_experiments
+    label: Experiments
+    group: experimental
+    keywords: [randomised controlled trial, randomized controlled trial, laboratory experiment, lab experiment, field experiment, experimental design, experimental methods, survey experiment]
+    keywords_cs: [RCT, RCTs]
+  - id: m_surveys
+    label: Survey design and analysis
+    group: qual_survey
+    keywords: [questionnaire design, survey design, survey methods, survey data collection, sampling methods, contingent valuation, stated preference, choice experiment]
+  - id: m_qualitative
+    label: Qualitative research
+    group: qual_survey
+    keywords: [qualitative research, qualitative methods, interviews, case study, case studies, focus group, content analysis, thematic analysis, archival research]
+  - id: m_theory
+    label: Theory and formal modelling
+    group: theory_modelling
+    keywords: [game theory, mathematical modelling, mathematical modeling, constrained optimisation, constrained optimization, general equilibrium, dynamic programming, formal model, comparative statics, theoretical model, dynamic optimisation, dynamic optimization]
+
+theories:
+  - {id: th_human_capital, label: Human capital theory, keywords: [human capital]}
+  - {id: th_bargaining, label: Bargaining models, keywords: [bargaining model, bargaining theory, nash bargaining, right-to-manage, efficient bargaining]}
+  - {id: th_monopsony, label: Monopsony, keywords: [monopsony]}
+  - {id: th_search, label: Search and matching, keywords: [search and matching, search theory, job search]}
+  - {id: th_rational_expectations, label: Rational expectations, keywords: [rational expectations]}
+  - {id: th_phillips, label: Phillips curve, keywords: [phillips curve]}
+  - {id: th_islm, label: IS-LM / AD-AS, keywords: [is-lm, is–lm, ad-as, aggregate demand]}
+  - {id: th_new_keynesian, label: New Keynesian models, keywords: [new keynesian]}
+  - {id: th_rbc, label: Real business cycle theory, keywords: [real business cycle]}
+  - {id: th_solow, label: Solow growth model, keywords: [solow]}
+  - {id: th_endogenous_growth, label: Endogenous growth theory, keywords: [endogenous growth]}
+  - {id: th_olg, label: Overlapping generations, keywords: [overlapping generations]}
+  - {id: th_comparative_advantage, label: Comparative advantage, keywords: [comparative advantage, heckscher-ohlin, ricardian model]}
+  - {id: th_ppp, label: Purchasing power parity, keywords: [purchasing power parity]}
+  - {id: th_externalities, label: Externalities and Pigouvian taxation, keywords: [externalities, externality, pigouvian, coase theorem]}
+  - {id: th_public_goods, label: Public goods, keywords: [public goods]}
+  - {id: th_optimal_tax, label: Optimal taxation, keywords: [optimal taxation, optimal tax]}
+  - {id: th_prospect, label: Prospect theory, keywords: [prospect theory, loss aversion]}
+  - {id: th_bounded_rationality, label: Bounded rationality, keywords: [bounded rationality, heuristics and biases]}
+  - {id: th_game_theory, label: Game theory, keywords: [game theory, nash equilibrium]}
+  - {id: th_capm, label: CAPM and factor models, keywords: [capm, capital asset pricing, factor model]}
+  - {id: th_emh, label: Efficient markets hypothesis, keywords: [efficient market, market efficiency]}
+  - {id: th_principal_agent, label: Principal–agent theory, keywords: [principal-agent, principal–agent, moral hazard, adverse selection, asymmetric information]}
+
+territories:
+  # ------------------------------------------------------------- labour ----
+  - id: lab_unions
+    field: labour
+    label: Labour-market institutions and declining trade union influence
+    path: [Labour economics, Labour-market institutions, "Union membership, collective bargaining and worker bargaining power"]
+    blurb: Why union membership and collective bargaining have changed, and what that means for pay and working conditions.
+    keywords: [trade union, trade unions, unions, union membership, collective bargaining, bargaining power, industrial relations, labour market institutions, labor market institutions, union wage]
+    themes: [institutions, inequality, bargaining, work]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_descriptive, m_panel, m_causal]
+    style: descriptive_comparison
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: high
+    angles:
+      - Union representation and wage dispersion
+      - Changes in collective bargaining coverage across sectors or countries
+      - Institutional differences in how bargaining is organised
+    data_routes:
+      - {name: "OECD/AIAS ICTWSS database (union density, bargaining coverage)", access: open, note: "Country-year indicators; check definitions and years covered."}
+      - {name: "UK Labour Force Survey (via the UK Data Service)", access: registration, note: "Individual-level union membership; check your university's access."}
+      - {name: "Workplace Employment Relations Study (WERS)", access: registration, note: "Workplace-level, last wave is dated; check suitability."}
+    risks:
+      - Separating association from causal effects is hard; union members differ from non-members.
+      - Union measures are not fully comparable across countries and years.
+      - The territory is broad and needs narrowing to a setting, sector or period.
+    search_strings:
+      - collective bargaining coverage wage inequality panel Europe
+      - trade union decline wage distribution literature review
+      - union membership decline causes cross-country
+    supervisor_questions:
+      - Is a single-country or a cross-country comparison more realistic for an undergraduate project on unions?
+    adjacent: [lab_wage_inequality, lab_min_wage, pub_tax_redistribution]
+
+  - id: lab_wage_inequality
+    field: labour
+    label: Wage inequality and the returns to skills
+    path: [Labour economics, Wages and inequality, "Pay gaps between groups and the returns to education and skills"]
+    blurb: How pay differs across groups, qualifications and occupations, and what explains the gaps.
+    keywords: [wage inequality, wage distribution, wage determination, returns to education, returns to schooling, skill premium, earnings inequality, gender pay gap, pay gap, discrimination, wage differentials, earnings function, mincer]
+    themes: [inequality, skills, work, education]
+    approach: quant_empirical
+    secondary_approaches: []
+    methods: [m_ols, m_descriptive, m_panel]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: high
+    angles:
+      - Pay gaps by gender, ethnicity or region and how much observable characteristics explain
+      - Graduate earnings premia across subjects or cohorts
+      - Changes in the pay distribution over time
+    data_routes:
+      - {name: "UK Labour Force Survey / Annual Population Survey (UK Data Service)", access: registration, note: "Individual earnings and characteristics."}
+      - {name: "Understanding Society (UKHLS)", access: registration, note: "Household panel; check wave coverage of your variables."}
+      - {name: "ONS Annual Survey of Hours and Earnings published tables", access: open, note: "Aggregates are open; the microdata are restricted."}
+    risks:
+      - Unobserved ability and selection make 'returns' hard to interpret causally.
+      - A decomposition describes gaps; it does not by itself explain them.
+      - Very large existing literature, so a narrow setting is needed to add anything.
+    search_strings:
+      - gender pay gap decomposition UK evidence
+      - returns to education survey of the literature
+      - wage inequality trends skill premium review
+    supervisor_questions:
+      - Would a descriptive decomposition be an acceptable contribution, or is a causal design expected?
+    adjacent: [lab_unions, lab_technology, pub_education]
+
+  - id: lab_min_wage
+    field: labour
+    label: Minimum wages and employment
+    path: [Labour economics, Labour-market policy, "Effects of wage floors on jobs, hours and pay"]
+    blurb: What happens to employment, hours and pay when a wage floor is introduced or raised.
+    keywords: [minimum wage, minimum wages, living wage, wage floor, monopsony, employment effects]
+    themes: [policy, inequality, work, bargaining]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_causal, m_panel, m_descriptive]
+    style: causal_identification
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: high
+    distributional_focus: high
+    angles:
+      - Regional or sectoral differences in how binding the wage floor is
+      - Effects on hours, employment or pay of younger workers
+      - Spillovers to pay just above the minimum
+    data_routes:
+      - {name: "Low Pay Commission reports and data annexes", access: open, note: "Good overview of UK evidence and measures."}
+      - {name: "UK Labour Force Survey (UK Data Service)", access: registration, note: "Check sample sizes for low-paid groups."}
+      - {name: "ONS ASHE published low-pay tables", access: open, note: "Aggregates only."}
+    risks:
+      - Credible identification needs a good comparison group; simple before/after comparisons mislead.
+      - Heavily researched topic, so the setting must be specific.
+      - Difference-in-differences style methods may go beyond what you have been taught.
+    search_strings:
+      - minimum wage employment effects difference-in-differences
+      - national living wage UK impact evaluation
+      - minimum wage monopsony evidence review
+    supervisor_questions:
+      - Is there a specific uprating or age threshold that would give a workable comparison?
+    adjacent: [lab_unions, lab_wage_inequality, pub_tax_redistribution]
+
+  - id: lab_technology
+    field: labour
+    label: Technology, automation and job polarisation
+    path: [Labour economics, Technology and skills, "How automation and new technology change the mix of jobs"]
+    blurb: How automation and digital technology change which jobs grow, shrink or change in content.
+    keywords: [automation, technological change, job polarisation, job polarization, skill-biased, routine tasks, artificial intelligence, robots, digitalisation, future of work, remote work]
+    themes: [technology, skills, work, inequality]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_descriptive, m_panel, m_ols]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: high
+    angles:
+      - Changes in employment shares of routine versus non-routine occupations
+      - Regional exposure to automation
+      - Technology adoption and skill requirements in one sector
+    data_routes:
+      - {name: "O*NET occupational task data", access: open, note: "US-based task measures; mapping to UK occupations needs care."}
+      - {name: "UK Labour Force Survey occupation data (UK Data Service)", access: registration, note: "Occupation codes change over time."}
+      - {name: "OECD Survey of Adult Skills (PIAAC)", access: open, note: "Public-use files; check country coverage."}
+    risks:
+      - Occupation classifications change over time, which complicates trends.
+      - Exposure measures are proxies and results are sensitive to which one is used.
+      - Fast-moving topic where recent claims outrun evidence.
+    search_strings:
+      - job polarisation routine-biased technological change evidence
+      - automation exposure local labour markets
+      - artificial intelligence occupations exposure measure
+    supervisor_questions:
+      - Which exposure measure is defensible for a UK application?
+    adjacent: [lab_wage_inequality, fio_digital_platforms, mac_growth]
+
+  # ------------------------------------------------------------- public ----
+  - id: pub_tax_redistribution
+    field: public
+    label: Taxation, redistribution and behavioural responses
+    path: [Public economics, Tax and transfer policy, "How taxes and benefits redistribute income and change behaviour"]
+    blurb: Who ends up bearing taxes and receiving transfers, and how people respond to them.
+    keywords: [taxation, income tax, redistribution, tax incidence, optimal taxation, tax avoidance, tax evasion, welfare state, benefits system, universal credit, tax and transfer, tax policy, progressive tax, welfare reform]
+    themes: [policy, inequality, incentives]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_descriptive, m_causal, m_ols]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: high
+    angles:
+      - Distributional effects of a specific tax or benefit reform
+      - Labour-supply responses around a threshold
+      - Cross-country differences in redistribution
+    data_routes:
+      - {name: "Family Resources Survey / Households Below Average Income (UK Data Service)", access: registration, note: "Household incomes and benefits."}
+      - {name: "OECD Tax Database and Income Distribution Database", access: open, note: "Country-level comparisons."}
+      - {name: "UKMOD tax-benefit microsimulation model", access: registration, note: "Free for academic use; learning curve."}
+    risks:
+      - Reforms are often announced in advance and bundled, which blurs their effects.
+      - Administrative tax data are usually inaccessible to students.
+      - Microsimulation takes time to learn.
+    search_strings:
+      - tax benefit reform distributional analysis UK
+      - labour supply response tax threshold bunching evidence
+      - redistribution inequality cross-country comparison
+    supervisor_questions:
+      - Is a microsimulation approach realistic in the time available?
+    adjacent: [lab_min_wage, pub_education, beh_nudges]
+
+  - id: pub_education
+    field: public
+    label: Education policy and human capital investment
+    path: [Public economics, Economics of education, "How funding, fees and school policy affect participation and outcomes"]
+    blurb: How funding, fees and school reforms affect who studies what and how they fare afterwards.
+    keywords: [economics of education, education policy, school funding, tuition fees, class size, human capital investment, higher education, student finance, school choice, educational attainment]
+    themes: [policy, education, skills, inequality]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_causal, m_ols, m_descriptive]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: high
+    angles:
+      - Participation in higher education before and after a fees or finance reform
+      - Differences in attainment by background
+      - International comparisons of school systems
+    data_routes:
+      - {name: "OECD PISA public-use data", access: open, note: "Cross-country student assessments."}
+      - {name: "HESA open data on higher education", access: open, note: "Aggregated; check level of detail."}
+      - {name: "Next Steps / LSYPE cohort study (UK Data Service)", access: registration, note: "English cohort; check variables."}
+    risks:
+      - Pupil-level administrative data normally require a restricted application.
+      - Family background confounds most comparisons.
+      - Policy changes often coincide with other reforms.
+    search_strings:
+      - tuition fees higher education participation evidence England
+      - class size student achievement causal evidence review
+      - socioeconomic gap educational attainment
+    supervisor_questions:
+      - Is aggregate open data enough here, or does the question need pupil-level data?
+    adjacent: [lab_wage_inequality, pub_tax_redistribution, dev_poverty]
+
+  - id: pub_health
+    field: public
+    label: Health policy, health behaviours and healthcare systems
+    path: [Public economics, Health economics, "How policy and incentives shape health behaviours and healthcare use"]
+    blurb: How prices, taxes and system design shape health behaviours, healthcare use and health inequalities.
+    keywords: [health economics, healthcare, health care, health policy, health insurance, sin tax, sugar tax, obesity, health inequalities, public health, hospital, waiting times]
+    themes: [policy, health, incentives, inequality]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_ols, m_descriptive, m_causal]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - Responses to a health-related tax or price change
+      - Regional variation in healthcare access or waiting times
+      - Socioeconomic gradients in a health behaviour
+    data_routes:
+      - {name: "Health Survey for England (UK Data Service)", access: registration, note: "Repeated cross-sections."}
+      - {name: "NHS England and OHID published statistics", access: open, note: "Aggregates by area or provider."}
+      - {name: "Global Burden of Disease / WHO Global Health Observatory", access: open, note: "Country-level indicators."}
+    risks:
+      - Health outcomes change slowly and have many causes.
+      - Patient-level data are tightly restricted.
+      - Area-level comparisons risk ecological fallacy.
+    search_strings:
+      - sugar tax consumption evaluation evidence
+      - socioeconomic inequalities health behaviours UK
+      - hospital waiting times regional variation determinants
+    supervisor_questions:
+      - Does this need ethical review even when using secondary health data?
+    adjacent: [pub_tax_redistribution, beh_nudges, dev_poverty]
+
+  # -------------------------------------------------------- development ----
+  - id: dev_institutions
+    field: development
+    label: Institutions, governance and long-run development
+    path: [Development economics, Institutions and growth, "How political and legal institutions relate to long-run prosperity"]
+    blurb: Why some countries prospered and others did not, and what role governance, law and history play.
+    keywords: [institutions and development, institutions and growth, governance, property rights, corruption, colonial, long-run development, economic history, rule of law, political economy, state capacity]
+    themes: [institutions, growth, history, politics]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_ols, m_descriptive, m_panel]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: open
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - Governance indicators and growth within one region
+      - Historical legacies and present-day outcomes
+      - Corruption measures and investment
+    data_routes:
+      - {name: "World Bank World Development Indicators", access: open, note: "Country-year indicators."}
+      - {name: "Worldwide Governance Indicators", access: open, note: "Perception-based; read the methodology."}
+      - {name: "V-Dem dataset", access: open, note: "Detailed political institutions measures."}
+    risks:
+      - Cross-country regressions rarely support causal claims.
+      - Institutional indicators are noisy and perception-based.
+      - Easy to end up too broad.
+    search_strings:
+      - institutions economic growth cross-country evidence critique
+      - governance indicators development panel
+      - colonial origins comparative development debate
+    supervisor_questions:
+      - Would a focused comparative case study be stronger than a cross-country regression?
+    adjacent: [dev_structural, mac_growth, int_trade_shocks]
+
+  - id: dev_poverty
+    field: development
+    label: Poverty, household finance and anti-poverty programmes
+    path: [Development economics, Poverty and households, "How cash transfers, microfinance and financial inclusion affect households"]
+    blurb: Whether cash transfers, microfinance and mobile money actually improve household welfare.
+    keywords: [poverty, microfinance, cash transfer, cash transfers, financial inclusion, mobile money, household welfare, anti-poverty, poverty alleviation, microcredit, poverty traps]
+    themes: [policy, poverty, households, inequality]
+    approach: quant_empirical
+    secondary_approaches: [experimental]
+    methods: [m_causal, m_experiments, m_descriptive]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: high
+    angles:
+      - Re-analysis of public replication data from a published trial
+      - Financial inclusion and household resilience in one country
+      - Comparing programme designs across settings
+    data_routes:
+      - {name: "Replication datasets from published trials (e.g. Harvard Dataverse, J-PAL/IPA data hubs)", access: open, note: "Check licence and documentation quality."}
+      - {name: "World Bank Global Findex", access: open, note: "Financial inclusion indicators and microdata."}
+      - {name: "DHS Program and LSMS household surveys", access: registration, note: "Free registration; approval can take time."}
+    risks:
+      - You cannot run your own trial; the project depends on existing data.
+      - Replication data can be poorly documented.
+      - Findings from one setting may not transfer to another.
+    search_strings:
+      - cash transfers household outcomes systematic review
+      - microfinance impact randomized evaluation evidence
+      - mobile money financial inclusion welfare
+    supervisor_questions:
+      - Is a replication-and-extension project acceptable as a dissertation?
+    adjacent: [dev_institutions, pub_education, beh_household_finance]
+
+  - id: dev_structural
+    field: development
+    label: Structural transformation, agriculture and industrialisation
+    path: [Development economics, Structural change, "How economies shift between agriculture, manufacturing and services"]
+    blurb: How economies move out of agriculture, and why some industrialise while others move straight to services.
+    keywords: [structural transformation, structural change, agricultural markets, agriculture, industrialisation, industrialization, dual economy, lewis model, premature deindustrialisation, commodity dependence, commodity prices]
+    themes: [growth, trade, sectors]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_descriptive, m_panel]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: open
+    technical_demand: low
+    distributional_focus: medium
+    angles:
+      - Sectoral employment shifts in one region
+      - Commodity dependence and diversification
+      - Agricultural productivity and rural incomes
+    data_routes:
+      - {name: "GGDC Economic Transformation Database", access: open, note: "Sector employment and value added."}
+      - {name: "FAOSTAT", access: open, note: "Agricultural production and prices."}
+      - {name: "World Bank World Development Indicators", access: open, note: "Sector shares."}
+    risks:
+      - Mostly descriptive; needs a clear analytical question to avoid a data tour.
+      - Sector data quality varies a lot across countries.
+    search_strings:
+      - structural transformation premature deindustrialisation evidence
+      - agricultural productivity structural change Africa
+      - commodity dependence diversification growth
+    supervisor_questions:
+      - What analytical framing would lift this beyond description?
+    adjacent: [dev_institutions, int_trade_shocks, mac_growth]
+
+  # -------------------------------------------------------------- macro ----
+  - id: mac_inflation_expectations
+    field: macro
+    label: Inflation expectations and central-bank communication
+    path: [Macroeconomics and monetary economics, Monetary policy, "How households and markets form inflation expectations and respond to central-bank communication"]
+    blurb: How people and markets form views about future inflation, and whether central-bank communication shifts them.
+    keywords: [inflation expectations, central bank communication, forward guidance, inflation targeting, phillips curve, inflation, central bank, central banks, monetary policy committee, credibility]
+    themes: [monetary, expectations, prices]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_timeseries, m_descriptive]
+    style: causal_identification
+    policy_relevance: high
+    data_access: open
+    technical_demand: high
+    distributional_focus: low
+    angles:
+      - Survey expectations before and after major announcements
+      - Differences in expectations across demographic groups
+      - Anchoring of long-run expectations over time
+    data_routes:
+      - {name: "Bank of England / Ipsos Inflation Attitudes Survey", access: open, note: "Quarterly; check question changes."}
+      - {name: "University of Michigan Surveys of Consumers", access: open, note: "Long US series."}
+      - {name: "FRED and Bank of England statistical database", access: open, note: "Policy rates, market-based measures."}
+    risks:
+      - Announcements coincide with other news, making effects hard to isolate.
+      - Time-series methods may go beyond taught material.
+      - Survey measures and market measures can disagree.
+    search_strings:
+      - inflation expectations central bank communication households evidence
+      - anchoring inflation expectations survey measures
+      - forward guidance effects event study
+    supervisor_questions:
+      - Is an event-study design feasible with the time-series methods I know?
+    adjacent: [mac_monetary_transmission, beh_household_finance, mac_fiscal]
+
+  - id: mac_monetary_transmission
+    field: macro
+    label: Monetary policy transmission to households and firms
+    path: [Macroeconomics and monetary economics, Monetary policy, "How interest-rate changes pass through to borrowing, spending and investment"]
+    blurb: How changes in interest rates feed through to mortgages, lending, spending and investment.
+    keywords: [monetary transmission, transmission mechanism, interest rates, quantitative easing, credit channel, mortgage rates, bank lending, interest rate pass-through, taylor rule]
+    themes: [monetary, credit, households]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_timeseries, m_panel, m_descriptive]
+    style: causal_identification
+    policy_relevance: high
+    data_access: open
+    technical_demand: high
+    distributional_focus: medium
+    angles:
+      - Pass-through from policy rate to mortgage or deposit rates
+      - Differences in transmission across regions or household types
+      - Effects of unconventional policy on lending
+    data_routes:
+      - {name: "Bank of England statistical database (quoted rates, lending)", access: open, note: "Long monthly series."}
+      - {name: "FRED", access: open, note: "US and international macro series."}
+      - {name: "ECB Statistical Data Warehouse", access: open, note: "Euro-area bank rates."}
+    risks:
+      - Policy responds to the economy, so correlation is not transmission.
+      - VAR-type methods need care and may not have been taught.
+      - Results depend heavily on sample period.
+    search_strings:
+      - interest rate pass-through mortgage rates evidence
+      - monetary policy transmission households heterogeneity
+      - quantitative easing bank lending effects
+    supervisor_questions:
+      - Which identification approach is realistic at undergraduate level?
+    adjacent: [mac_inflation_expectations, fio_corporate, mac_business_cycles]
+
+  - id: mac_business_cycles
+    field: macro
+    label: Business cycles and macroeconomic modelling
+    path: [Macroeconomics and monetary economics, Fluctuations, "What drives booms and recessions and how models explain them"]
+    blurb: What drives booms and recessions, and how well competing macro models explain them.
+    keywords: [business cycle, business cycles, real business cycle, dsge, new keynesian, is-lm, ad-as, recession, recessions, macroeconomic shocks, aggregate demand, output gap, economic fluctuations]
+    themes: [modelling, monetary, growth]
+    approach: theory_modelling
+    secondary_approaches: [quant_empirical]
+    methods: [m_theory, m_timeseries]
+    style: modelling
+    policy_relevance: low
+    data_access: open
+    technical_demand: high
+    distributional_focus: low
+    angles:
+      - Comparing how two model families explain a specific recession
+      - Extending a textbook model with one friction
+      - Stylised facts of the cycle in one economy
+    data_routes:
+      - {name: "ONS national accounts", access: open, note: "UK quarterly series."}
+      - {name: "FRED", access: open, note: "International macro series."}
+      - {name: "OECD Economic Outlook database", access: open, note: "Output gaps and forecasts."}
+    risks:
+      - Solving or simulating models may need software and maths beyond taught material.
+      - Hard to make a distinct contribution in pure theory at this level.
+    search_strings:
+      - business cycle stylized facts UK
+      - new keynesian model undergraduate exposition critique
+      - real business cycle versus new keynesian evidence
+    supervisor_questions:
+      - Is a theory-based dissertation acceptable, and what would count as a contribution?
+    adjacent: [mac_monetary_transmission, mac_growth, mac_fiscal]
+
+  - id: mac_fiscal
+    field: macro
+    label: Fiscal policy, public debt and austerity
+    path: [Macroeconomics and monetary economics, Fiscal policy, "How government spending, taxation and debt affect the economy"]
+    blurb: What government borrowing, spending cuts and stimulus do to growth, jobs and public debt.
+    keywords: [fiscal policy, government debt, public debt, austerity, fiscal multiplier, budget deficit, sovereign debt, government spending, fiscal consolidation, fiscal rules, debt sustainability]
+    themes: [policy, debt, growth]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_descriptive, m_panel, m_timeseries]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: open
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - Consolidation episodes and growth across countries
+      - Regional effects of spending cuts
+      - Debt dynamics under different interest-rate paths
+    data_routes:
+      - {name: "IMF World Economic Outlook and Fiscal Monitor data", access: open, note: "Country-year fiscal aggregates."}
+      - {name: "OBR public finances databank", access: open, note: "UK historical series."}
+      - {name: "OECD Economic Outlook database", access: open, note: "Cyclically adjusted balances."}
+    risks:
+      - Fiscal policy reacts to the cycle, which confounds simple comparisons.
+      - Multiplier estimates vary widely with method and period.
+    search_strings:
+      - fiscal multipliers evidence survey
+      - austerity growth effects panel advanced economies
+      - local government spending cuts UK effects
+    supervisor_questions:
+      - Is a cross-country panel or a single-country regional design more defensible?
+    adjacent: [pub_tax_redistribution, mac_business_cycles, mac_inflation_expectations]
+
+  - id: mac_growth
+    field: macro
+    label: Economic growth and productivity
+    path: [Macroeconomics and monetary economics, Growth, "Why productivity and living standards grow at different rates"]
+    blurb: Why productivity growth has slowed in some economies and why living standards diverge.
+    keywords: [economic growth, growth theory, solow, endogenous growth, productivity, total factor productivity, convergence, productivity puzzle, capital accumulation, growth accounting]
+    themes: [growth, technology, modelling]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_panel, m_descriptive, m_theory]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: open
+    technical_demand: medium
+    distributional_focus: low
+    angles:
+      - Growth accounting for one country or region
+      - Regional productivity gaps within a country
+      - Convergence among a group of economies
+    data_routes:
+      - {name: "Penn World Table", access: open, note: "Cross-country output, capital, TFP."}
+      - {name: "ONS regional and industry productivity statistics", access: open, note: "UK sub-national series."}
+      - {name: "OECD Productivity Statistics", access: open, note: "Comparable country series."}
+    risks:
+      - Productivity is measured with error, especially in services.
+      - Growth regressions are fragile and heavily criticised.
+    search_strings:
+      - UK productivity puzzle explanations review
+      - regional productivity differences determinants
+      - growth accounting convergence evidence
+    supervisor_questions:
+      - Which level (country, region or industry) gives a tractable question?
+    adjacent: [dev_institutions, lab_technology, mac_business_cycles]
+
+  # ------------------------------------------------------ international ----
+  - id: int_trade_shocks
+    field: international
+    label: Trade shocks, trade policy and local economies
+    path: [International economics, International trade, "How tariffs, trade agreements and import competition affect industries and regions"]
+    blurb: How tariffs, trade deals and import competition reshape industries, regions and jobs.
+    keywords: [international trade, trade liberalisation, trade liberalization, tariffs, tariff, import competition, comparative advantage, brexit, gravity model, global value chains, trade policy, trade agreements, protectionism, supply chains]
+    themes: [trade, policy, work, sectors]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_panel, m_descriptive, m_causal]
+    style: causal_identification
+    policy_relevance: high
+    data_access: open
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - Trade flows before and after a policy change
+      - Regional exposure to import competition
+      - Trade patterns in one sector or value chain
+    data_routes:
+      - {name: "UN Comtrade / World Bank WITS", access: open, note: "Bilateral trade by product; download limits apply."}
+      - {name: "CEPII gravity and BACI datasets", access: registration, note: "Free registration."}
+      - {name: "ONS and HMRC UK trade statistics", access: open, note: "UK flows by partner and product."}
+    risks:
+      - Gravity estimation has pitfalls (zeros, multilateral resistance) that need reading up.
+      - Recent policy changes overlap with other shocks.
+    search_strings:
+      - gravity model trade agreement effects estimation
+      - import competition local labour markets evidence
+      - Brexit trade effects empirical
+    supervisor_questions:
+      - Is a gravity-model application realistic with my econometrics background?
+    adjacent: [int_migration, dev_structural, lab_technology]
+
+  - id: int_exchange_rates
+    field: international
+    label: Exchange rates and international finance
+    path: [International economics, International macro and finance, "What moves exchange rates and how they affect prices and trade"]
+    blurb: What moves exchange rates, and how currency swings feed into prices, trade and capital flows.
+    keywords: [exchange rate, exchange rates, currency, purchasing power parity, capital flows, balance of payments, currency union, exchange rate pass-through, open economy macroeconomics, interest parity, currency crises]
+    themes: [monetary, trade, prices]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_timeseries, m_descriptive]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: open
+    technical_demand: high
+    distributional_focus: low
+    angles:
+      - Pass-through from a depreciation to import or consumer prices
+      - Testing a parity condition for one currency pair
+      - Exchange-rate regime and trade performance
+    data_routes:
+      - {name: "BIS effective exchange rate indices", access: open, note: "Nominal and real, monthly."}
+      - {name: "IMF International Financial Statistics", access: open, note: "Country series."}
+      - {name: "Bank of England and ONS price series", access: open, note: "UK import and consumer prices."}
+    risks:
+      - Exchange rates are notoriously hard to explain empirically.
+      - Requires time-series techniques (unit roots, cointegration).
+    search_strings:
+      - exchange rate pass-through import prices evidence
+      - purchasing power parity empirical tests review
+      - sterling depreciation prices effects
+    supervisor_questions:
+      - Is a single-episode study more tractable than a long time series?
+    adjacent: [mac_monetary_transmission, int_trade_shocks, fio_asset_pricing]
+
+  - id: int_migration
+    field: international
+    label: Migration and its economic effects
+    path: [International economics, Migration, "How migration affects wages, public finances and origin countries"]
+    blurb: How migration affects wages, jobs and public finances at destination, and families at origin.
+    keywords: [migration, immigration, emigration, remittances, labour mobility, labor mobility, refugees, migrant workers, brain drain]
+    themes: [work, policy, inequality, households]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_panel, m_descriptive, m_causal]
+    style: causal_identification
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: high
+    angles:
+      - Local labour-market outcomes and migrant inflows
+      - Remittances and household spending in one country
+      - Sectoral reliance on migrant workers
+    data_routes:
+      - {name: "ONS migration statistics and Annual Population Survey", access: registration, note: "Aggregates are open; microdata via UK Data Service."}
+      - {name: "OECD International Migration Database", access: open, note: "Flows and stocks by origin."}
+      - {name: "World Bank / KNOMAD remittances data", access: open, note: "Country-level."}
+    risks:
+      - Migrants choose where to go, so local comparisons are confounded.
+      - Politically charged topic; needs neutral framing and careful sources.
+    search_strings:
+      - immigration wages employment effects evidence review
+      - remittances household consumption evidence
+      - migration local labour market shift-share
+    supervisor_questions:
+      - What comparison would make an effect estimate credible here?
+    adjacent: [int_trade_shocks, lab_wage_inequality, dev_poverty]
+
+  # ------------------------------------------------------ environmental ----
+  - id: env_carbon_pricing
+    field: environmental
+    label: Carbon pricing and climate policy
+    path: [Environmental and energy economics, Climate policy, "How carbon taxes and emissions trading affect emissions, firms and households"]
+    blurb: Whether carbon taxes and emissions trading cut emissions, and who bears the cost.
+    keywords: [carbon tax, carbon pricing, emissions trading, cap and trade, climate policy, carbon policy, pollution, emissions, externalities, pigouvian, carbon leakage, net zero]
+    themes: [policy, climate, incentives]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_panel, m_descriptive, m_causal]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: open
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - Emissions trends in covered versus uncovered sectors
+      - Distributional incidence of a carbon price
+      - Differences in policy design across jurisdictions
+    data_routes:
+      - {name: "World Bank Carbon Pricing Dashboard", access: open, note: "Instruments, prices, coverage."}
+      - {name: "EU ETS data via the European Environment Agency", access: open, note: "Installation-level allocations and emissions."}
+      - {name: "Our World in Data CO2 and greenhouse gas dataset", access: open, note: "Country-year emissions."}
+    risks:
+      - Carbon prices change alongside energy prices and other policies.
+      - Installation-level data need careful cleaning.
+    search_strings:
+      - carbon tax emissions reduction empirical evaluation
+      - EU ETS effects firms emissions evidence
+      - carbon pricing distributional impact households
+    supervisor_questions:
+      - Which jurisdiction offers a clean enough policy change to study?
+    adjacent: [env_energy, pub_tax_redistribution, env_valuation]
+
+  - id: env_energy
+    field: environmental
+    label: Energy markets and the low-carbon transition
+    path: [Environmental and energy economics, Energy markets, "How prices, renewables and regulation shape electricity and fuel markets"]
+    blurb: How renewables, price shocks and regulation are reshaping electricity and fuel markets.
+    keywords: [energy markets, electricity markets, electricity, renewable energy, renewables, energy prices, fossil fuels, energy transition, natural resources, oil prices, gas prices, energy policy, energy security]
+    themes: [climate, sectors, prices, technology]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_descriptive, m_timeseries, m_panel]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: open
+    technical_demand: medium
+    distributional_focus: low
+    angles:
+      - Wholesale prices and the share of renewables
+      - Household energy costs after a price shock
+      - Cross-country differences in generation mix
+    data_routes:
+      - {name: "UK government energy statistics (DUKES, Energy Trends)", access: open, note: "Annual and quarterly."}
+      - {name: "Ember electricity data", access: open, note: "Generation by source, many countries."}
+      - {name: "Energy Institute Statistical Review of World Energy", access: open, note: "Long country series."}
+    risks:
+      - Market rules are complex and differ by country.
+      - High-frequency price data can be hard to obtain free of charge.
+    search_strings:
+      - renewable generation wholesale electricity prices merit order effect
+      - energy price shock household impact
+      - energy transition electricity market design
+    supervisor_questions:
+      - Is there enough freely available price data for the market I have in mind?
+    adjacent: [env_carbon_pricing, fio_market_power, mac_inflation_expectations]
+
+  - id: env_valuation
+    field: environmental
+    label: Valuing the environment and climate adaptation
+    path: [Environmental and energy economics, Environmental valuation, "How people value environmental quality and how communities adapt to climate risks"]
+    blurb: How much people value clean air, green space or flood protection, and how communities adapt to climate risk.
+    keywords: [environmental valuation, cost-benefit analysis, cost benefit analysis, contingent valuation, willingness to pay, climate adaptation, circular economy, flood risk, ecosystem services, non-market valuation, hedonic pricing, natural capital]
+    themes: [climate, households, policy]
+    approach: qual_survey
+    secondary_approaches: [quant_empirical]
+    methods: [m_surveys, m_descriptive, m_ols]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: restricted
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - A small stated-preference survey on a local environmental good
+      - House prices and environmental risk or amenity
+      - Critical review of valuations used in a policy appraisal
+    data_routes:
+      - {name: "Your own stated-preference survey", access: own_collection, note: "Needs ethics approval, piloting and enough respondents."}
+      - {name: "HM Land Registry Price Paid Data", access: open, note: "For hedonic approaches; needs matching to environmental data."}
+      - {name: "Environment Agency open flood-risk data", access: open, note: "Spatial data; needs GIS skills."}
+    risks:
+      - Own data collection is time-consuming and needs ethics approval.
+      - Stated values can differ from real behaviour.
+      - Spatial matching may need GIS skills you have not been taught.
+    search_strings:
+      - contingent valuation willingness to pay urban green space
+      - flood risk house prices hedonic evidence
+      - stated preference methods validity review
+    supervisor_questions:
+      - Is primary data collection permitted, and what is the ethics timeline?
+    adjacent: [env_carbon_pricing, beh_nudges, pub_health]
+
+  # -------------------------------------------------------- behavioural ----
+  - id: beh_nudges
+    field: behavioural
+    label: Nudges, defaults and behavioural public policy
+    path: [Behavioural and experimental economics, Behavioural policy, "How defaults, framing and reminders change decisions"]
+    blurb: Whether defaults, framing and reminders really change what people do, and for how long.
+    keywords: [nudge, nudges, behavioural economics, behavioral economics, defaults, choice architecture, present bias, bounded rationality, loss aversion, framing, behavioural insights, behavioural public policy]
+    themes: [policy, decisions, incentives]
+    approach: experimental
+    secondary_approaches: [qual_survey, quant_empirical]
+    methods: [m_experiments, m_surveys, m_descriptive]
+    style: policy_evaluation
+    policy_relevance: high
+    data_access: restricted
+    technical_demand: medium
+    distributional_focus: low
+    angles:
+      - A small online survey experiment on framing
+      - Re-analysis of open data from a published nudge study
+      - Critical comparison of nudge effect sizes across domains
+    data_routes:
+      - {name: "Your own survey experiment", access: own_collection, note: "Needs ethics approval and a recruitment plan."}
+      - {name: "Open replication data (e.g. OSF, Harvard Dataverse)", access: open, note: "Check the licence and documentation."}
+      - {name: "Published trial reports from behavioural-insights units", access: open, note: "Usually summaries only, not microdata."}
+    risks:
+      - Small student samples give imprecise results.
+      - Published nudge effects are subject to publication-bias concerns.
+      - Ethics approval can take weeks.
+    search_strings:
+      - nudge effectiveness meta-analysis publication bias
+      - default effects pension enrolment evidence
+      - framing survey experiment behavioural economics
+    supervisor_questions:
+      - Is a small survey experiment acceptable, and how many participants would be credible?
+    adjacent: [beh_social_preferences, pub_health, beh_household_finance]
+
+  - id: beh_social_preferences
+    field: behavioural
+    label: Social preferences, fairness and cooperation
+    path: [Behavioural and experimental economics, Social preferences, "How fairness, trust and reciprocity shape economic decisions"]
+    blurb: How fairness, trust and reciprocity shape bargaining, giving and cooperation.
+    keywords: [social preferences, fairness, altruism, trust, reciprocity, public goods game, ultimatum game, dictator game, cooperation, inequality aversion, experimental games]
+    themes: [decisions, bargaining, modelling]
+    approach: experimental
+    secondary_approaches: [theory_modelling]
+    methods: [m_experiments, m_theory, m_descriptive]
+    style: causal_identification
+    policy_relevance: low
+    data_access: restricted
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - Re-analysis of open data from classic experimental games
+      - A classroom or online version of a standard game
+      - Comparing models of fairness against published results
+    data_routes:
+      - {name: "Open experimental datasets (e.g. OSF, journal replication archives)", access: open, note: "Check documentation."}
+      - {name: "Your own classroom or online experiment", access: own_collection, note: "Ethics approval; incentives may need funding."}
+    risks:
+      - Incentivised experiments cost money.
+      - Student samples limit how far results generalise.
+    search_strings:
+      - social preferences experimental evidence review
+      - ultimatum game cross-cultural results
+      - inequality aversion model tests
+    supervisor_questions:
+      - Would a replication with existing data count as sufficient originality?
+    adjacent: [beh_nudges, fio_digital_platforms, lab_unions]
+
+  - id: beh_household_finance
+    field: behavioural
+    label: "Household financial decisions: saving, borrowing and pensions"
+    path: [Behavioural and experimental economics, Household finance, "Why households save, borrow and invest the way they do"]
+    blurb: Why households save too little, borrow expensively or avoid investing, and what helps.
+    keywords: [household finance, saving behaviour, savings, pensions, financial literacy, consumer credit, household debt, time preferences, retirement saving, financial decision]
+    themes: [households, decisions, credit]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_ols, m_descriptive, m_surveys]
+    style: descriptive_comparison
+    policy_relevance: medium
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: medium
+    angles:
+      - Financial literacy and saving behaviour
+      - Who holds high-cost credit
+      - Pension participation after automatic enrolment
+    data_routes:
+      - {name: "Wealth and Assets Survey (UK Data Service)", access: registration, note: "Household wealth and debt."}
+      - {name: "Understanding Society (UKHLS)", access: registration, note: "Savings and financial strain questions."}
+      - {name: "FCA Financial Lives survey published tables", access: open, note: "Check whether microdata access is available to you."}
+    risks:
+      - Self-reported finances are noisy.
+      - Literacy and behaviour influence each other, so causal claims are weak.
+    search_strings:
+      - financial literacy saving behaviour evidence
+      - automatic enrolment pension participation UK
+      - household debt high-cost credit determinants
+    supervisor_questions:
+      - Is a descriptive profile enough, or should I look for a policy change to exploit?
+    adjacent: [beh_nudges, mac_monetary_transmission, dev_poverty]
+
+  # --------------------------------------------------------- finance/IO ----
+  - id: fio_market_power
+    field: finance_io
+    label: Market power, competition and regulation
+    path: [Finance and industrial organisation, Competition, "How concentration, mergers and regulation affect prices and consumers"]
+    blurb: Whether markets are becoming less competitive, and what mergers and regulation do to prices.
+    keywords: [market power, competition policy, monopoly, oligopoly, mergers, antitrust, market structure, markups, market concentration, regulation, collusion, cartel, pricing strategy]
+    themes: [firms, policy, prices, sectors]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling, qual_survey]
+    methods: [m_descriptive, m_ols, m_theory]
+    style: descriptive_comparison
+    policy_relevance: high
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: low
+    angles:
+      - Concentration and prices in one industry
+      - A case study of a merger decision
+      - Regulated versus unregulated price outcomes
+    data_routes:
+      - {name: "Competition and Markets Authority case documents and market studies", access: open, note: "Rich qualitative and some quantitative evidence."}
+      - {name: "Company accounts databases (e.g. FAME/Orbis)", access: subscription, note: "Only if your library subscribes."}
+      - {name: "ONS business and price statistics", access: open, note: "Industry aggregates."}
+    risks:
+      - Firm-level price and cost data are rarely public.
+      - Concentration is not the same as market power.
+    search_strings:
+      - market concentration markups evidence
+      - merger retrospective price effects
+      - competition policy digital markets review
+    supervisor_questions:
+      - Is a single-industry case study with public documents acceptable?
+    adjacent: [fio_digital_platforms, fio_corporate, env_energy]
+
+  - id: fio_asset_pricing
+    field: finance_io
+    label: Asset pricing and market efficiency
+    path: [Finance and industrial organisation, Financial markets, "How assets are priced and whether markets use information efficiently"]
+    blurb: Whether stock returns can be explained by risk, and how quickly prices absorb news.
+    keywords: [asset pricing, capm, efficient markets, stock returns, portfolio theory, risk premium, financial markets, anomalies, stock market, equity returns, market efficiency]
+    themes: [finance, modelling, prices]
+    approach: quant_empirical
+    secondary_approaches: [theory_modelling]
+    methods: [m_timeseries, m_ols, m_theory]
+    style: modelling
+    policy_relevance: low
+    data_access: open
+    technical_demand: high
+    distributional_focus: low
+    angles:
+      - Testing a factor model on one market
+      - Price reactions around a type of announcement
+      - Persistence of a known return anomaly
+    data_routes:
+      - {name: "Kenneth French Data Library", access: open, note: "Factor and portfolio returns."}
+      - {name: "Free price histories (e.g. Stooq, exchange websites)", access: open, note: "Check adjustments for dividends and splits."}
+      - {name: "Datastream / Bloomberg terminals", access: subscription, note: "Only if your library provides access."}
+    risks:
+      - Very crowded literature; replication without a twist adds little.
+      - Results are sensitive to sample and data-snooping.
+    search_strings:
+      - factor model tests UK stock returns
+      - event study methodology announcement returns
+      - market efficiency anomalies review
+    supervisor_questions:
+      - What would make a factor-model test more than a textbook replication?
+    adjacent: [fio_corporate, int_exchange_rates, mac_monetary_transmission]
+
+  - id: fio_corporate
+    field: finance_io
+    label: Corporate investment, finance and governance
+    path: [Finance and industrial organisation, Corporate finance, "How firms choose investment, financing and governance"]
+    blurb: How firms decide what to invest in and how to pay for it, and whether governance matters.
+    keywords: [corporate finance, corporate investment, capital structure, corporate governance, dividend policy, firm investment, research and development, innovation, corporate strategy, firm performance]
+    themes: [firms, finance, credit]
+    approach: quant_empirical
+    secondary_approaches: [qual_survey]
+    methods: [m_panel, m_ols, m_descriptive]
+    style: descriptive_comparison
+    policy_relevance: low
+    data_access: moderate
+    technical_demand: medium
+    distributional_focus: low
+    angles:
+      - Investment and financing constraints in one sector
+      - Board characteristics and firm outcomes
+      - R&D spending around a policy change
+    data_routes:
+      - {name: "Company accounts databases (e.g. FAME/Orbis)", access: subscription, note: "Only if your library subscribes."}
+      - {name: "Annual reports and Companies House filings", access: open, note: "Manual collection is slow."}
+      - {name: "ONS business investment statistics", access: open, note: "Aggregates only."}
+    risks:
+      - Firm panels usually sit behind subscriptions.
+      - Governance and performance are jointly determined.
+    search_strings:
+      - capital structure determinants UK firms panel
+      - corporate governance firm performance evidence
+      - R&D tax credit investment effects
+    supervisor_questions:
+      - Does the library give access to a firm-level database I could use?
+    adjacent: [fio_market_power, fio_asset_pricing, mac_monetary_transmission]
+
+  - id: fio_digital_platforms
+    field: finance_io
+    label: Digital platforms, network effects and pricing
+    path: [Finance and industrial organisation, Digital markets, "How platforms compete, set prices and use network effects"]
+    blurb: How platforms use network effects and pricing to grow, and what that means for competition.
+    keywords: [digital platforms, platform economics, digital markets, network effects, two-sided markets, platform competition, auctions, gig economy, big tech, data economy]
+    themes: [firms, technology, modelling, decisions]
+    approach: theory_modelling
+    secondary_approaches: [qual_survey, quant_empirical]
+    methods: [m_theory, m_descriptive, m_qualitative]
+    style: modelling
+    policy_relevance: medium
+    data_access: restricted
+    technical_demand: high
+    distributional_focus: low
+    angles:
+      - Applying a two-sided market model to one platform
+      - A case study of a platform regulation decision
+      - Pricing structures across competing platforms
+    data_routes:
+      - {name: "Regulator and court documents on platform cases", access: open, note: "Qualitative evidence."}
+      - {name: "Platform data", access: restricted, note: "Rarely available; scraping may breach terms of service."}
+    risks:
+      - Platform data are proprietary.
+      - Theory-led work needs comfort with formal models.
+    search_strings:
+      - two-sided markets platform pricing theory survey
+      - network effects platform competition evidence
+      - digital markets regulation economics
+    supervisor_questions:
+      - Is a theory-plus-case-study design acceptable without original data?
+    adjacent: [fio_market_power, lab_technology, beh_social_preferences]

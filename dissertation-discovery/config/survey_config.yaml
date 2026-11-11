@@ -1,0 +1,469 @@
+# Dissertation Discovery — survey design, scoring and adaptivity configuration.
+#
+# EVERYTHING in this file is a researcher/developer decision. The LLM never
+# reads or changes it. Numbers are PROPOSED DEFAULTS from PRODUCT_SPEC.md, not
+# empirically calibrated estimates. If you change anything that alters what the
+# survey measures (dimensions, items, pairs, attribute levels, scoring), bump
+# `design_version` so responses from different designs are never pooled.
+
+design_version: "dd-survey-0.1.0"
+
+# ---------------------------------------------------------------- scales ----
+scales:
+  likert5:
+    min: 1
+    max: 5
+    anchors:
+      1: Strongly disagree
+      2: Disagree
+      3: Neither agree nor disagree
+      4: Agree
+      5: Strongly agree
+  interest5:
+    min: 1
+    max: 5
+    anchors:
+      1: Not at all interested
+      2: Slightly interested
+      3: Moderately interested
+      4: Very interested
+      5: Extremely interested
+
+# ------------------------------------------------------------ dimensions ----
+# The fixed constructs. `keys` are the preference keys scored in code.
+dimensions:
+  - id: substantive_interest
+    label: Substantive interest
+    description: Attraction to fields and phenomena.
+    keys: []          # scored per field / per territory, not as a single key
+  - id: methods_fit
+    label: Methods fit
+    description: Enjoyment of empirical, theoretical, qualitative or experimental work.
+    keys: [approach.quant_empirical, approach.theory_modelling, approach.qual_survey, approach.experimental]
+  - id: research_style
+    label: Research style
+    description: Preference for causal identification, careful description/comparison, modelling or policy evaluation.
+    keys: [style.causal_identification, style.descriptive_comparison, style.modelling, style.policy_evaluation]
+  - id: policy_relevance
+    label: Policy / social relevance
+    description: Importance of practical implications.
+    keys: [policy_relevance]
+  - id: feasibility_tolerance
+    label: Feasibility tolerance
+    description: Comfort with difficult data, demanding methods and uncertain identification.
+    keys: [feasibility_tolerance]
+  - id: familiarity_novelty
+    label: Familiarity versus novelty
+    description: Deepening taught material versus exploring adjacent areas.
+    keys: [novelty]
+  - id: research_values
+    label: Research values (optional)
+    description: Optional, skippable importance statements about research focus. Not a political-orientation measure.
+    keys: [distributional_values]
+  - id: career_connection
+    label: Career connection (optional)
+    description: Recorded and shown in the summary; NOT used in ranking.
+    keys: []
+  - id: constraints
+    label: Constraints
+    description: Asked directly, never inferred.
+    keys: []
+
+# Fixed attribute levels used on territory cards and profile cards.
+attributes:
+  approach:
+    quant_empirical: Quantitative data analysis
+    theory_modelling: Theory and formal modelling
+    qual_survey: Surveys, interviews or case material
+    experimental: Experiments
+  style:
+    causal_identification: Causal identification
+    descriptive_comparison: Careful description and comparison
+    modelling: Modelling and theoretical explanation
+    policy_evaluation: Policy evaluation
+  policy_relevance: {low: Mostly academic interest, medium: Some policy relevance, high: Direct policy relevance}
+  data_access: {open: Openly available data, moderate: Data needs registration or some effort, restricted: Data hard to obtain or must be collected}
+  technical_demand: {low: Modest technical demand, medium: Moderate technical demand, high: High technical demand}
+  distributional_focus: {low: Aggregate focus, medium: Some group comparison, high: Centres on differences between groups}
+  familiarity: {familiar: Builds on material you studied, adjacent: Next to material you studied, novel: New to your programme, unknown: (no syllabus)}
+
+# Numeric position of ordered levels on 0–1 (used only inside scoring code).
+level_values:
+  policy_relevance: {low: 0.0, medium: 0.5, high: 1.0}
+  data_access: {open: 1.0, moderate: 0.65, restricted: 0.3}
+  technical_demand: {low: 1.0, medium: 0.65, high: 0.35}
+  distributional_focus: {low: 0.0, medium: 0.5, high: 1.0}
+
+# ----------------------------------------------------------- calibration ----
+# Phase A. Fixed wording; `{behaviour}` etc. are filled from the discipline
+# pack's `phrases`, never by an LLM.
+calibration:
+  field_interest:
+    id_prefix: "cal_field"
+    scale: interest5
+    prompt: "How interested are you in each of these areas as something to research?"
+    help: "A quick first impression is fine. The forced choices later carry more weight than these ratings."
+  likert_items:
+    - id: cal_enjoy_data
+      text: "I enjoy using data to test explanations for {behaviour}."
+      dimension: methods_fit
+      signals: {approach.quant_empirical: 1}
+    - id: cal_enjoy_theory
+      text: "I enjoy working through formal models or theoretical arguments."
+      dimension: methods_fit
+      signals: {approach.theory_modelling: 1}
+    - id: cal_enjoy_qual
+      text: "I would enjoy collecting or analysing surveys, interviews or case material."
+      dimension: methods_fit
+      signals: {approach.qual_survey: 1}
+    - id: cal_policy
+      text: "I would rather examine a policy with clear real-world consequences than an abstract model with elegant predictions."
+      dimension: policy_relevance
+      signals: {policy_relevance: 1}
+    - id: cal_causal
+      text: "Establishing whether one thing causes another matters more to me than describing patterns carefully."
+      dimension: research_style
+      signals: {style.causal_identification: 1, style.descriptive_comparison: -1}
+    - id: cal_feasibility
+      text: "I am comfortable taking on a project where the data or the method may prove difficult."
+      dimension: feasibility_tolerance
+      signals: {feasibility_tolerance: 1}
+    - id: cal_novelty
+      text: "I would rather explore an area beyond what my modules covered than go deeper into taught material."
+      dimension: familiarity_novelty
+      signals: {novelty: 1}
+  optional_items:
+    - id: cal_values_distribution
+      text: "Understanding differences in outcomes between groups is important in the research I want to do."
+      dimension: research_values
+      signals: {distributional_values: 1}
+      note: "Optional. Skipping it carries no penalty: territories are then ranked without this consideration."
+    - id: cal_career
+      text: "I want my dissertation to connect to the kind of work I hope to do after university."
+      dimension: career_connection
+      signals: {}
+      note: "Optional. Recorded for your summary and supervisor discussion; not used in ranking."
+  constraints:
+    - id: con_software
+      text: "Which best describes your comfort with statistical software (for example Stata, R or Python)?"
+      options:
+        none: "I have not really used any"
+        basic: "I can follow worked examples"
+        comfortable: "I can run and adapt analyses myself"
+        unsure: "Not sure"
+    - id: con_data_access
+      text: "What data could you realistically work with?"
+      options:
+        public_only: "Only data I can download freely"
+        can_apply: "I would register or apply for access if needed"
+        collect: "I would consider collecting my own (survey, interviews, experiment)"
+        unsure: "Not sure yet"
+  open_prompt:
+    id: cal_open
+    text: "Optional: what lecture, issue or question has stuck with you?"
+    note: "Kept in your summary as a prompt for your own reading. It is not scored or analysed."
+
+# ------------------------------------------------------- choice task design --
+choice_tasks:
+  territory_pair:
+    template_id: territory_pair
+    prompt: "Which would you be more motivated to spend around 100 hours researching?"
+    dimensions: [substantive_interest]
+  allow_unsure: true            # OPEN DECISION (spec §15): whether "neither / unsure" is permitted
+  strength_options:             # optional follow-up after choosing
+    slight: Slightly
+    clear: Clearly
+    strong: Strongly
+  reason_options:               # optional; fixed codes, each tied to attributes
+    topic: The subject itself
+    method: The kind of method involved
+    feasibility: How doable it looks
+    relevance: Its real-world relevance
+    familiarity: How familiar or new it is
+  # Which card attributes each reason code refers to.
+  reason_attributes:
+    method: [approach, style]
+    feasibility: [data_access, technical_demand]
+    relevance: [policy_relevance, distributional_focus]
+    familiarity: [familiarity]
+
+# Profile pairs: research-project profiles that differ ONLY in the listed
+# attributes. `signals` state exactly which preference key each option moves
+# (1 = towards the key, 0 = away). `grounding_methods` lists method IDs that,
+# if found in a confirmed studied module, may be cited in the question wording.
+profile_pairs:
+  - id: pp_feasibility_fascination
+    dimension: feasibility_tolerance
+    prompt: "Which project would you rather commit to?"
+    a:
+      label: "A question that fascinates you, with data that may be hard to obtain"
+      blurb: "You care a lot about the answer, but suitable data are uncertain and you may have to narrow the scope later."
+      attributes: {data_access: restricted, appeal: high}
+      signals: {feasibility_tolerance: 1}
+    b:
+      label: "A slightly less exciting question with readily available data"
+      blurb: "The question is decent rather than thrilling, but you can download the data this week and start analysing."
+      attributes: {data_access: open, appeal: moderate}
+      signals: {feasibility_tolerance: 0}
+  - id: pp_style_causal_descriptive
+    dimension: research_style
+    prompt: "Which research direction appeals more?"
+    grounding_methods: [m_causal]
+    a:
+      label: "A direction where causal identification is central"
+      blurb: "The core challenge is arguing convincingly that one thing caused another, for example using a policy change as a natural experiment."
+      attributes: {style: causal_identification}
+      signals: {style.causal_identification: 1, style.descriptive_comparison: 0}
+    b:
+      label: "A direction focused on careful descriptive comparison"
+      blurb: "The core challenge is documenting patterns accurately across groups, places or periods and interpreting them cautiously."
+      attributes: {style: descriptive_comparison}
+      signals: {style.causal_identification: 0, style.descriptive_comparison: 1}
+  - id: pp_approach_empirical_theory
+    dimension: methods_fit
+    prompt: "Which way of working would you enjoy more over several months?"
+    grounding_methods: [m_ols, m_panel, m_theory]
+    a:
+      label: "Working with a dataset"
+      blurb: "Cleaning data, running and interpreting estimates, and checking how robust the results are."
+      attributes: {approach: quant_empirical}
+      signals: {approach.quant_empirical: 1, approach.theory_modelling: 0}
+    b:
+      label: "Working with a model"
+      blurb: "Setting out assumptions, deriving results and explaining what the model predicts and why."
+      attributes: {approach: theory_modelling}
+      signals: {approach.quant_empirical: 0, approach.theory_modelling: 1}
+  - id: pp_familiar_novel
+    dimension: familiarity_novelty
+    prompt: "Which starting point would you prefer?"
+    a:
+      label: "Go deeper into something you were taught"
+      blurb: "You already know the core ideas and readings, so you can get to the frontier of the topic faster."
+      attributes: {familiarity: familiar}
+      signals: {novelty: 0}
+    b:
+      label: "Explore an area your modules did not cover"
+      blurb: "You start with more background reading, but the subject is new to you and chosen purely out of curiosity."
+      attributes: {familiarity: novel}
+      signals: {novelty: 1}
+  - id: pp_policy_technical
+    dimension: policy_relevance
+    prompt: "Which project would you rather explain to someone in a year's time?"
+    a:
+      label: "A policy question with clear real-world stakes, analysed with simple tools"
+      blurb: "The contribution is a clear, careful answer to a practical question, not technical sophistication."
+      attributes: {policy_relevance: high, technical_demand: low}
+      signals: {policy_relevance: 1}
+    b:
+      label: "A technically demanding question of mainly academic interest"
+      blurb: "The contribution is methodological or theoretical depth; practical implications are indirect."
+      attributes: {policy_relevance: low, technical_demand: high}
+      signals: {policy_relevance: 0}
+  - id: pp_approach_quant_qual
+    dimension: methods_fit
+    prompt: "Which kind of evidence would you rather work with?"
+    grounding_methods: [m_surveys, m_qualitative, m_ols]
+    a:
+      label: "Existing numerical datasets"
+      blurb: "Large samples collected by statistical agencies or researchers, analysed statistically."
+      attributes: {approach: quant_empirical}
+      signals: {approach.quant_empirical: 1, approach.qual_survey: 0}
+    b:
+      label: "Evidence you gather from people or documents"
+      blurb: "Your own survey, interviews or case material: smaller scale, but closer to how people actually decide."
+      attributes: {approach: qual_survey}
+      signals: {approach.quant_empirical: 0, approach.qual_survey: 1}
+  - id: pp_style_policyeval_modelling
+    dimension: research_style
+    prompt: "Which kind of contribution would you rather make?"
+    a:
+      label: "Assess whether a specific policy worked"
+      blurb: "Take one intervention and weigh the evidence on what it changed, for whom, and at what cost."
+      attributes: {style: policy_evaluation}
+      signals: {style.policy_evaluation: 1, style.modelling: 0}
+    b:
+      label: "Explain a mechanism with a model"
+      blurb: "Build or adapt a framework that explains why a pattern arises, whether or not a policy is involved."
+      attributes: {style: modelling}
+      signals: {style.policy_evaluation: 0, style.modelling: 1}
+  - id: pp_scope_ambitious_narrow
+    dimension: feasibility_tolerance
+    prompt: "Which plan would you rather take to your supervisor?"
+    a:
+      label: "An ambitious design that might not fully work"
+      blurb: "A demanding method or comparison that would be impressive if it comes off, with a real risk of having to scale back."
+      attributes: {technical_demand: high, scope: ambitious}
+      signals: {feasibility_tolerance: 1}
+    b:
+      label: "A narrow design you are confident you can finish"
+      blurb: "A tightly scoped question using techniques you already know, with little risk of nasty surprises."
+      attributes: {technical_demand: low, scope: narrow}
+      signals: {feasibility_tolerance: 0}
+  - id: pp_approach_experimental_observational
+    dimension: methods_fit
+    prompt: "Which source of evidence appeals more?"
+    grounding_methods: [m_experiments]
+    a:
+      label: "An experiment or survey experiment you design"
+      blurb: "You control the comparison, but you must design it, get ethics approval and recruit participants."
+      attributes: {approach: experimental}
+      signals: {approach.experimental: 1}
+    b:
+      label: "Observational data that already exist"
+      blurb: "No recruitment or ethics hurdles, but you must work harder to rule out alternative explanations."
+      attributes: {approach: quant_empirical}
+      signals: {approach.experimental: 0}
+
+# Phase C clarification questions. Each is asked at most once, only when its
+# trigger holds. Triggers are evaluated in code (dissdisc/survey/engine.py).
+clarifications:
+  - id: cl_causal_vs_data
+    dimension: methods_fit
+    trigger: {high: style.causal_identification, low: approach.quant_empirical}
+    explanation: "You have signalled that cause-and-effect questions matter to you, and also that hands-on data work appeals less. Both are reasonable; this question checks which should weigh more."
+    prompt: "If a causal question interested you, which route would you take?"
+    a:
+      label: "Learn and apply the data methods the question needs"
+      blurb: "Accept more time on data and estimation because the causal answer is what you care about."
+      attributes: {approach: quant_empirical}
+      signals: {approach.quant_empirical: 1}
+    b:
+      label: "Study the causal argument through theory and existing studies"
+      blurb: "Engage with the causal debate critically, without producing your own estimates."
+      attributes: {approach: theory_modelling}
+      signals: {approach.quant_empirical: 0, approach.theory_modelling: 1}
+  - id: cl_policy_vs_theory
+    dimension: policy_relevance
+    trigger: {high: policy_relevance, also_high: approach.theory_modelling}
+    explanation: "You value real-world relevance and also enjoy theory. These can pull in different directions for a dissertation; this question checks which matters more."
+    prompt: "If you had to lean one way, which would it be?"
+    a:
+      label: "A practical policy question, even if the theory is thin"
+      blurb: "Relevance first: the framework is whatever helps answer the practical question."
+      attributes: {policy_relevance: high}
+      signals: {policy_relevance: 1, approach.theory_modelling: 0}
+    b:
+      label: "A theoretically rich question, even if the policy link is indirect"
+      blurb: "Depth first: practical implications are a bonus, not the point."
+      attributes: {policy_relevance: low}
+      signals: {policy_relevance: 0, approach.theory_modelling: 1}
+  - id: cl_interest_vs_feasibility
+    dimension: feasibility_tolerance
+    trigger: {leader_feasibility_below_gate: true, low: feasibility_tolerance}
+    explanation: "Your current leading direction looks demanding on data or method, while you have said you prefer manageable projects. This question checks how you want to handle that tension."
+    prompt: "For a direction you like that looks hard to carry out, which would you do?"
+    a:
+      label: "Keep the direction and accept the difficulty"
+      blurb: "Stay with what interests you most and plan extra time for data and method problems."
+      attributes: {scope: ambitious}
+      signals: {feasibility_tolerance: 1}
+    b:
+      label: "Look for a more tractable neighbouring direction"
+      blurb: "Move to something close by that is clearly doable, even if it is a little less exciting."
+      attributes: {scope: narrow}
+      signals: {feasibility_tolerance: 0}
+
+# ----------------------------------------------------------------- scoring --
+scoring:
+  # fit(t) = Σ weight × component. PLACEHOLDER weights from the spec (§6.2);
+  # not empirically calibrated. Shown to students under "How this was ranked".
+  weights:
+    topic_interest: 0.35
+    method_fit: 0.20
+    feasibility: 0.20
+    values_alignment: 0.15
+    exploration_fit: 0.10
+  # Every preference score is a weighted average of observations in [0,1]
+  # shrunk towards a neutral 0.5 by `prior_strength` pseudo-observations.
+  prior_strength: 2.0
+  # Topic interest starts from the field rating and moves with each territory choice (Elo-style heuristic):
+  #   step = choice_step × strength weight × (1 − expected), expected = logistic((chosen − other) / expectation_scale)
+  # so an expected choice moves scores little and a surprising one moves them more. Not an estimated model.
+  choice_step: 0.30
+  expectation_scale: 0.15
+  likert_weight: 1.0
+  field_rating_weight: 2.0
+  module_enjoyment_weight: 0.75   # student's own liked/disliked flag on a module (a response, not syllabus inference)
+  choice_weight_default: 0.8      # when no strength is given
+  strength_weights: {slight: 0.5, clear: 0.8, strong: 1.0}
+  field_spill: 0.5                # share of a territory choice's step also applied to its whole field
+  attribute_spill: 0.15           # share of a territory choice credited to differing card attributes (kept small:
+                                  # territory choices are mostly about the subject)
+  attribute_spill_with_reason: 1.0  # ...when the student says that attribute was the reason
+  method_fit:
+    approach_weight: 0.6
+    style_weight: 0.4
+    secondary_approach_discount: 0.85
+  feasibility:
+    software_adjust:              # by con_software × technical_demand
+      none: {high: -0.20, medium: -0.10, low: 0.0}
+      basic: {high: -0.08, medium: 0.0, low: 0.0}
+      comfortable: {high: 0.08, medium: 0.04, low: 0.0}
+    data_adjust:                  # by con_data_access × data_access
+      public_only: {restricted: -0.25, moderate: -0.08, open: 0.0}
+      can_apply: {restricted: 0.08, moderate: 0.04, open: 0.0}
+      collect: {restricted: 0.05, moderate: 0.0, open: 0.0}
+    syllabus_method_taught: 0.10        # a typical method appears in a confirmed studied module
+    syllabus_method_not_found: -0.05    # syllabus confirmed, but none of the typical methods found
+    tolerance_relief: 0.6               # how much stated tolerance softens the feasibility term in the ranking
+    gate_threshold: 0.40                # below this, the territory is flagged...
+    gate_penalty: 0.85                  # ...and its overall fit is multiplied by this (1.0 = warning only)
+  familiarity_values: {familiar: 1.0, adjacent: 0.5, novel: 0.0}
+
+diversity:
+  n_results: 3
+  max_per_field: 2                # relaxed automatically if it cannot be satisfied
+  min_topic_interest: 0.5         # runners-up need at least neutral topic interest (relaxed if too few qualify)
+  max_shared_theme_share: 0.6     # reject a candidate sharing more than this share of themes with a chosen one
+
+evidence:
+  # "Evidence" = how much consistent survey evidence supports a recommendation.
+  # It is NOT a probability of enjoyment or success.
+  points:
+    field_rated: 1.0
+    direct_task: 1.5
+    direct_task_cap: 3.0
+    field_task: 0.75
+    field_task_cap: 2.25
+    approach_and_style_observed: 1.0
+    contradiction: -1.0
+    high_unsure_share: -1.5
+  unsure_share_threshold: 0.4
+  labels:                         # minimum points for each label
+    Higher evidence: 4.5
+    Moderate evidence: 2.5
+    Limited evidence: 1.0
+    Insufficient information: -999
+
+# --------------------------------------------------------------- adaptivity --
+adaptive:
+  # Phase B opening: alternate territory (T) and profile (P) tasks for broad coverage.
+  coverage_sequence: [T, P, T, P, T, P, T, P]
+  # How fields are paired in the opening territory tasks (fields ordered by the student's interest rating):
+  #   interleaved: 1st v 5th, 2nd v 6th, ... (default)   adjacent: 1st v 2nd, 3rd v 4th, ...
+  # OPEN DESIGN DECISION: changes which comparisons are observed; bump design_version if you change it.
+  coverage_pairing: interleaved
+  coverage_profile_pairs: [pp_approach_empirical_theory, pp_feasibility_fascination, pp_style_causal_descriptive, pp_familiar_novel]
+  followup_profile_pairs: [pp_policy_technical, pp_approach_quant_qual, pp_style_policyeval_modelling, pp_scope_ambitious_narrow, pp_approach_experimental_observational]
+  min_tasks: 10
+  max_tasks: 14
+  stability_window: 3             # stop when the top three are unchanged over this many answered tasks
+  tie_margin: 0.03                # top-two fit difference treated as a near tie
+  min_key_weight: 1.0             # a preference key with less observed weight than this counts as under-observed
+  required_keys: [approach.quant_empirical, approach.theory_modelling, style.causal_identification, policy_relevance, feasibility_tolerance, novelty]
+  exploration_ratio: 0.3          # target share of territory tasks containing a territory outside the confirmed syllabus (spec proposes ~70/30)
+  no_syllabus_exploration_every: 3  # without a syllabus: every Nth adaptive territory task introduces an unseen territory
+  max_clarifications: 2
+  max_territory_run: 3            # after this many territory tasks in a row, ask a follow-up profile pair
+  refine_margin: 0.15             # siblings of the leader within this fit margin are compared with it directly
+  conflict_high: 0.65
+  conflict_low: 0.40
+
+# ------------------------------------------------------------------ uploads --
+uploads:
+  max_file_mb: 10
+  max_pages: 300
+  max_chars: 400000
+  min_chars_per_page: 40          # below this average a PDF is treated as image-only
+  accepted_extensions: [.pdf, .docx, .txt, .md, .csv]
+  llm_chunk_chars: 16000

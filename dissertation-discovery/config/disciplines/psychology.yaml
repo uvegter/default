@@ -1,0 +1,15 @@
+# Placeholder pack demonstrating discipline extensibility (spec Scenario H).
+# It deliberately has NO territories: the app must show a clear
+# "content pack not yet available" message and must never fall back to
+# Economics territories.
+id: psychology
+label: Psychology
+pack_version: "psych-0.0.0-placeholder"
+phrases:
+  behaviour: "behaviour"
+fields:
+  - {id: cognitive, label: Cognitive psychology, keywords: [cognitive psychology, memory, attention], adjacent: []}
+  - {id: social, label: Social psychology, keywords: [social psychology, attitudes, group processes], adjacent: []}
+methods: []
+theories: []
+territories: []

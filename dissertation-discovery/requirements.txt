@@ -1,0 +1,8 @@
+streamlit>=1.50
+pydantic>=2.6
+PyYAML>=6.0
+pypdf>=4.0
+python-docx>=1.1
+anthropic>=0.80
+pytest>=8.0
+reportlab>=4.0   # tests and sample-file generation only

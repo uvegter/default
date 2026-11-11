@@ -1,0 +1,21 @@
+# Library / database entry points for the research handoff. Configurable per
+# institution; `generic` is used when no institution is selected. These are
+# database HOMEPAGES and search entry points, never invented article links.
+institutions:
+  generic:
+    label: "My university (generic links)"
+    library: {label: "Your university library search", url: null, note: "Search your library catalogue first: it shows what you can read for free."}
+    databases:
+      - {label: "EconLit", url: null, note: "Economics-specific index; reach it through your library's database list."}
+      - {label: "Scopus", url: "https://www.scopus.com/", note: "Sign in through your institution."}
+      - {label: "Web of Science", url: "https://www.webofscience.com/", note: "Sign in through your institution."}
+      - {label: "Google Scholar (optional)", url: "https://scholar.google.com/", note: "Broad but unfiltered; check that results are peer-reviewed."}
+  leeds:
+    label: "University of Leeds"
+    library: {label: "Leeds University Library", url: "https://library.leeds.ac.uk/", note: "Use Library Search and the subject databases list."}
+    databases:
+      - {label: "EconLit", url: null, note: "Listed under the Library's economics subject databases."}
+      - {label: "Scopus", url: "https://www.scopus.com/", note: "Sign in with your University of Leeds account."}
+      - {label: "Web of Science", url: "https://www.webofscience.com/", note: "Sign in with your University of Leeds account."}
+      - {label: "Google Scholar (optional)", url: "https://scholar.google.com/", note: "Broad but unfiltered."}
+scholar_search_url: "https://scholar.google.com/scholar?q={query}"

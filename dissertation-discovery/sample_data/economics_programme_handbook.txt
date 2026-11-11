@@ -1,0 +1,190 @@
+Northfield University (fictional sample) — School of Economics
+BSc Economics: Programme Handbook and Module Catalogue 2026/27
+
+This handbook lists every module available on the programme. You will not take all of them:
+the compulsory modules are taken by everyone, and optional modules are chosen each year.
+
+Year 1
+
+Compulsory modules
+ECON1010 Principles of Microeconomics (20 credits)
+ECON1020 Principles of Macroeconomics (20 credits)
+ECON1030 Mathematics for Economists (20 credits)
+ECON1040 Statistics for Economics (20 credits)
+ECON1050 Economic History of the Modern World (10 credits)
+ECON1060 Academic Skills for Economists (10 credits)
+
+Optional modules (choose 20 credits)
+ECON1110 Introduction to Finance (10 credits)
+ECON1120 Economics of Global Challenges (10 credits)
+ECON1130 Introduction to Business Economics (10 credits)
+ECON1140 Politics and the Economy (10 credits)
+
+Year 2
+
+Compulsory modules
+ECON2010 Intermediate Microeconomics (20 credits)
+ECON2020 Intermediate Macroeconomics (20 credits)
+ECON2030 Introductory Econometrics (20 credits)
+ECON2040 Economics Research Methods (10 credits)
+
+Optional modules (choose 50 credits)
+ECON2110 Labour Economics (20 credits)
+ECON2120 Environmental Economics (10 credits)
+ECON2130 Behavioural Economics (10 credits)
+ECON2140 Economics of Development (20 credits)
+ECON2150 Industrial Organisation (20 credits)
+ECON2160 Public Economics (20 credits)
+ECON2170 International Trade (10 credits)
+ECON2180 Money and Banking (10 credits)
+ECON2190 Health Economics (10 credits)
+ECON2200 Economics of Education (10 credits)
+ECON2210 Game Theory and Strategy (10 credits)
+ECON2220 Corporate Finance (10 credits)
+
+Year 3
+
+Compulsory modules
+ECON3000 Economics Dissertation (40 credits)
+ECON3010 Advanced Microeconomics (20 credits)
+ECON3020 Advanced Macroeconomics (20 credits)
+
+Optional modules (choose 40 credits)
+ECON3110 Applied Econometrics (20 credits)
+ECON3120 Monetary Economics (20 credits)
+ECON3130 Economics of Inequality (10 credits)
+ECON3140 International Finance (10 credits)
+ECON3150 Energy and Climate Economics (10 credits)
+ECON3160 Experimental Economics (10 credits)
+ECON3170 Financial Economics (20 credits)
+ECON3180 Economics of Migration (10 credits)
+ECON3190 Political Economy (10 credits)
+ECON3200 Competition and Regulation (10 credits)
+ECON3210 Economics of Technology and Innovation (10 credits)
+ECON3220 Time Series Econometrics (10 credits)
+
+Module specifications
+
+ECON2110 Labour Economics
+Credits: 20
+Level: Year 2
+Module leader: Dr A. Example (a.example@northfield.example)
+Overview
+This module applies microeconomic theory and empirical evidence to the labour market.
+Module content
+Week 1: Labour supply – hours of work; participation; taxes and benefits
+Week 2: Labour demand – competitive model; monopsony
+Week 3: Human capital – returns to education; training; signalling
+Week 4: Wage determination and wage inequality – skill premium; gender pay gap; discrimination
+Week 5: Labour market institutions: trade unions; collective bargaining; union wage premium
+Week 6: Minimum wages – employment effects; evidence from natural experiments
+Week 7: Unemployment – search and matching; job search
+Week 8: Technological change and job polarisation – routine tasks; automation
+Week 9: Migration and the labour market
+Learning outcomes
+- Explain how labour market institutions affect wages and employment
+- Evaluate empirical evidence on labour market policies using regression analysis
+- Interpret published estimates critically
+Assessment
+Two-hour examination (70%) and one essay (30%)
+Reading list
+Selected chapters from a standard labour economics textbook.
+
+ECON2020 Intermediate Macroeconomics
+Credits: 20
+Level: Year 2
+Module content
+1. The IS-LM model and aggregate demand
+2. The Phillips curve and inflation expectations: adaptive expectations; rational expectations
+3. Monetary policy: inflation targeting; central bank communication; the Taylor rule
+4. Fiscal policy: government debt; fiscal multipliers
+5. Business cycles: real business cycle theory; New Keynesian models
+6. Economic growth: the Solow model; endogenous growth
+7. The open economy: exchange rates; purchasing power parity
+Learning outcomes
+- Use formal models to analyse macroeconomic policy
+- Apply comparative statics to standard macroeconomic models
+Assessment
+Examination (100%)
+
+ECON2030 Introductory Econometrics
+Credits: 20
+Level: Year 2
+Module content
+- Descriptive statistics and data visualisation
+- Simple and multiple regression: ordinary least squares; hypothesis testing; functional form
+- Dummy variables and interaction terms
+- Heteroskedasticity and specification
+- Panel data: fixed effects; random effects
+- Endogeneity and instrumental variables
+- Introduction to causal inference: difference-in-differences
+Methods and skills
+Students use Stata to estimate and interpret regression models.
+Learning outcomes
+- Estimate and interpret multiple regression models using statistical software
+- Recognise threats to causal interpretation
+Assessment
+Computer-based project (40%) and examination (60%)
+
+ECON2040 Economics Research Methods
+Credits: 10
+Level: Year 2
+Module content
+Topic 1: Research design – formulating questions; literature reviews
+Topic 2: Quantitative and qualitative approaches – questionnaire design; interviews; case studies
+Topic 3: Quasi-experimental methods – natural experiments; regression discontinuity
+Topic 4: Critical evaluation of published research
+Topic 5: Research ethics
+Learning outcomes
+- Evaluate empirical research designs
+- Plan a small independent research project
+Assessment
+Research proposal (100%)
+
+ECON2120 Environmental Economics
+Credits: 10
+Level: Year 2
+Module content
+Week 1: Externalities and market failure – Pigouvian taxes; the Coase theorem
+Week 2: Carbon pricing – carbon taxes; emissions trading
+Week 3: Environmental valuation – contingent valuation; willingness to pay; cost-benefit analysis
+Week 4: Energy markets and renewable energy
+Week 5: Climate adaptation and the circular economy
+Assessment
+Policy report (100%)
+
+ECON2160 Public Economics
+Credits: 20
+Level: Year 2
+Module content
+Week 1: Public goods and externalities
+Week 2: Taxation – tax incidence; optimal taxation; tax avoidance
+Week 3: Redistribution and the welfare state – benefits system; universal credit
+Week 4: Education policy – school funding; tuition fees
+Week 5: Health policy – health insurance; health inequalities
+Assessment
+Examination (100%)
+
+ECON3120 Monetary Economics
+Credits: 20
+Level: Year 3
+Module content
+Week 1: Money demand and money supply
+Week 2: Monetary transmission – credit channel; interest rate pass-through; quantitative easing
+Week 3: Inflation expectations and forward guidance
+Week 4: Time series methods for monetary policy analysis: vector autoregression; event study
+Assessment
+Examination (100%)
+
+ECON2130 Behavioural Economics
+Credits: 10
+Level: Year 2
+Module content
+Week 1: Bounded rationality – heuristics and biases
+Week 2: Prospect theory and loss aversion
+Week 3: Present bias and saving behaviour – pensions; defaults
+Week 4: Social preferences – fairness; reciprocity; the ultimatum game
+Week 5: Nudges and choice architecture
+Week 6: Experimental design – laboratory experiments; field experiments
+Assessment
+Experiment design report (100%)
